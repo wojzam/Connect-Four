@@ -54,6 +54,14 @@ public class Board {
         return valuesCopy;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private int findFirstEmptyIndex(int column) {
         for (int i = height - 1; i >= 0; i--) {
             if (values[i][column] == EMPTY) {
