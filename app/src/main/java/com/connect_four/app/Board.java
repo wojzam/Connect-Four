@@ -5,6 +5,8 @@ import java.util.Arrays;
 public class Board {
 
     public static final byte EMPTY = 0;
+    public static final byte PLAYER_1 = 1;
+    public static final byte PLAYER_2 = 2;
     private final byte[][] values;
     private final int width;
     private final int height;
