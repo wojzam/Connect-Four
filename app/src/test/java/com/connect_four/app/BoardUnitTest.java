@@ -1,10 +1,10 @@
-package com.connectfour.app;
+package com.connect_four.app;
 
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.connectfour.app.Board.EMPTY;
+import static com.connect_four.app.Board.EMPTY;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

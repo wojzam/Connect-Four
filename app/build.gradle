@@ -6,7 +6,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.connectfour.app"
+        applicationId "com.connect_four.app"
         minSdk 23
         targetSdk 32
         versionCode 1
