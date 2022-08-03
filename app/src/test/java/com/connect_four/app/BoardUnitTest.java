@@ -13,7 +13,7 @@ public class BoardUnitTest {
     @Test
     public void shouldInitializeArray() {
         Board board = new Board(2, 3);
-        int[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}, {EMPTY, EMPTY}};
+        byte[][] expectedValues = {{EMPTY, EMPTY, EMPTY}, {EMPTY, EMPTY, EMPTY}};
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }
@@ -21,7 +21,7 @@ public class BoardUnitTest {
     @Test
     public void shouldInsertValueIntoFirstEmptyIndex() {
         Board board = new Board(2, 2);
-        int[][] expectedValues = {{EMPTY, EMPTY}, {1, EMPTY}};
+        byte[][] expectedValues = {{1, EMPTY}, {EMPTY, EMPTY}};
 
         board.insertIntoColumn(0, 1);
 

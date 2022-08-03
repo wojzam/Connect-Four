@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public class Board {
 
-    public static final int EMPTY = 0;
-    private final int[][] values;
+    public static final byte EMPTY = 0;
+    private final byte[][] values;
     private final int width;
     private final int height;
 
@@ -16,21 +16,21 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        values = new int[height][width];
+        values = new byte[width][height];
         clearBoard();
     }
 
     public void clearBoard() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 values[i][j] = EMPTY;
             }
         }
     }
 
     public void print() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 System.out.print(values[i][j] + " ");
             }
             System.out.println();
@@ -40,16 +40,16 @@ public class Board {
     public boolean insertIntoColumn(int column, int value) {
         int index = findFirstEmptyIndex(column);
         if (index >= 0) {
-            values[index][column] = value;
+            values[column][index] = (byte) value;
             return true;
         }
         return false;
     }
 
-    public int[][] getValues() {
-        int[][] valuesCopy = new int[height][width];
-        for (int i = 0; i < height; i++) {
-            valuesCopy[i] = Arrays.copyOf(values[i], width);
+    public byte[][] getValues() {
+        byte[][] valuesCopy = new byte[width][height];
+        for (int i = 0; i < width; i++) {
+            valuesCopy[i] = Arrays.copyOf(values[i], height);
         }
         return valuesCopy;
     }
@@ -63,8 +63,8 @@ public class Board {
     }
 
     private int findFirstEmptyIndex(int column) {
-        for (int i = height - 1; i >= 0; i--) {
-            if (values[i][column] == EMPTY) {
+        for (int i = 0; i < height; i++) {
+            if (values[column][i] == EMPTY) {
                 return i;
             }
         }
