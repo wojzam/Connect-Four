@@ -51,9 +51,13 @@ public class Board {
     public byte[][] getValues() {
         byte[][] valuesCopy = new byte[width][height];
         for (int i = 0; i < width; i++) {
-            valuesCopy[i] = Arrays.copyOf(values[i], height);
+            valuesCopy[i] = getColumnValues(i);
         }
         return valuesCopy;
+    }
+
+    public byte[]getColumnValues(int column) {
+        return Arrays.copyOf(values[column], height);
     }
 
     public int getWidth() {
