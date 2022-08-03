@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ConnectFour</string>
+    <string name="new_game">NOWA GRA</string>
 </resources>
