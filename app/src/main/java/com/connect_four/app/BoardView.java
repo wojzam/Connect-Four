@@ -6,6 +6,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+
 import static com.connect_four.app.Board.PLAYER_1;
 import static com.connect_four.app.Board.PLAYER_2;
 
@@ -14,6 +16,7 @@ public class BoardView {
     private final Board board;
     private final LinearLayout layout;
     private final TextView text;
+    private final ArrayList<ColumnLayout> columns = new ArrayList<>();
 
     public BoardView(@NonNull LinearLayout layout, @NonNull TextView text) {
         this.board = new Board();
@@ -27,13 +30,21 @@ public class BoardView {
             ColumnLayout columnLayout = new ColumnLayout(layout.getContext(), board.getHeight());
             int column = i;
             columnLayout.setOnClickListener(view -> {
-                if (board.playerInsertIntoColumn(column)) {
+                if (board.insertIntoColumn(column)) {
                     columnLayout.refresh(board.getColumnValues(column));
-                    updateTextView();
+
+                    if(board.wonGame() || board.isFull()){
+                        text.setText("Koniec gry");
+                        endGame();
+                    } else {
+                        board.changePlayer();
+                        updateTextView();
+                    }
                 }
             });
 
             layout.addView(columnLayout);
+            columns.add(columnLayout);
         }
     }
 
@@ -49,6 +60,13 @@ public class BoardView {
                 break;
             default:
                 text.setText("");
+        }
+    }
+
+    private void endGame(){
+        for(ColumnLayout columnLayout: columns){
+            columnLayout.setOnClickListener(null);
+            columnLayout.setClickable(false);
         }
     }
 }

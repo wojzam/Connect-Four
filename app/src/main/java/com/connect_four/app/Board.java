@@ -51,12 +51,55 @@ public class Board {
         return false;
     }
 
-    public boolean playerInsertIntoColumn(int column){
-        if(insertIntoColumn(column, currentPlayerID)){
-            changePlayer();
-            return true;
+    public boolean insertIntoColumn(int column) {
+        return insertIntoColumn(column, currentPlayerID);
+    }
+
+    public boolean wonGame() {
+        byte id = currentPlayerID;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height - 3; j++) {
+                if (values[i][j] == id && values[i][j + 1] == id && values[i][j + 2] == id && values[i][j + 3] == id) {
+                    return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < width - 3; i++) {
+            for (int j = 0; j < height; j++) {
+                if (values[i][j] == id && values[i + 1][j] == id && values[i + 2][j] == id && values[i + 3][j] == id) {
+                    return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < width - 3; i++) {
+            for (int j = 0; j < height - 3; j++) {
+                if (values[i][j] == id && values[i + 1][j + 1] == id && values[i + 2][j + 2] == id && values[i + 3][j + 3] == id) {
+                    return true;
+                }
+            }
+        }
+
+        for (int i = 3; i < width; i++) {
+            for (int j = 0; j < height - 3; j++) {
+                if (values[i][j] == id && values[i - 1][j + 1] == id && values[i - 2][j + 2] == id && values[i - 3][j + 3] == id) {
+                    return true;
+                }
+            }
         }
         return false;
+    }
+
+    public boolean isFull(){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (values[i][j] == EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public byte[][] getValues() {
@@ -67,7 +110,7 @@ public class Board {
         return valuesCopy;
     }
 
-    public byte[]getColumnValues(int column) {
+    public byte[] getColumnValues(int column) {
         return Arrays.copyOf(values[column], height);
     }
 
@@ -83,10 +126,10 @@ public class Board {
         return currentPlayerID;
     }
 
-    private void changePlayer(){
-        if(currentPlayerID == PLAYER_1){
+    public void changePlayer() {
+        if (currentPlayerID == PLAYER_1) {
             currentPlayerID = PLAYER_2;
-        } else{
+        } else {
             currentPlayerID = PLAYER_1;
         }
     }
