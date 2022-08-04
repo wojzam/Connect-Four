@@ -39,10 +39,10 @@ public class Board {
         }
     }
 
-    public boolean insertIntoColumn(int column, int value) {
+    public boolean insertIntoColumn(int column, byte value) {
         int index = findFirstEmptyIndex(column);
         if (index >= 0) {
-            values[column][index] = (byte) value;
+            values[column][index] = value;
             return true;
         }
         return false;

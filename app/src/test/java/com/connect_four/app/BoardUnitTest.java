@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static com.connect_four.app.Board.EMPTY;
+import static com.connect_four.app.Board.PLAYER_1;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -21,9 +22,9 @@ public class BoardUnitTest {
     @Test
     public void shouldInsertValueIntoFirstEmptyIndex() {
         Board board = new Board(2, 2);
-        byte[][] expectedValues = {{1, EMPTY}, {EMPTY, EMPTY}};
+        byte[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
 
-        board.insertIntoColumn(0, 1);
+        board.insertIntoColumn(0, PLAYER_1);
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }
@@ -32,8 +33,8 @@ public class BoardUnitTest {
     public void shouldNotInsertValue_whenColumnIsFull() {
         Board board = new Board(2, 2);
 
-        assertTrue(board.insertIntoColumn(0, 1));
-        assertTrue(board.insertIntoColumn(0, 1));
-        assertFalse(board.insertIntoColumn(0, 1));
+        assertTrue(board.insertIntoColumn(0, PLAYER_1));
+        assertTrue(board.insertIntoColumn(0, PLAYER_1));
+        assertFalse(board.insertIntoColumn(0, PLAYER_1));
     }
 }
