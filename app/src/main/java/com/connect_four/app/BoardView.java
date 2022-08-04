@@ -19,6 +19,7 @@ public class BoardView {
         this.board = new Board();
         this.layout = layout;
         this.text = text;
+        updateTextView();
     }
 
     public void createColumns() {
