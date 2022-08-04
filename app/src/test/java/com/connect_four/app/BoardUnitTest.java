@@ -10,6 +10,7 @@ import static com.connect_four.app.Board.PLAYER_1;
 import static com.connect_four.app.Board.PLAYER_2;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 public class BoardUnitTest {
 
@@ -29,6 +30,18 @@ public class BoardUnitTest {
     }
 
     @Test
+    public void shouldReturnTrue_whenColumnIsNotFull() {
+        assertTrue(board.insertIntoColumn(0));
+    }
+
+    @Test
+    public void shouldReturnFalse_whenColumnIsFull() {
+        board.insertIntoColumn(0);
+        board.insertIntoColumn(0);
+        assertFalse(board.insertIntoColumn(0));
+    }
+
+    @Test
     public void shouldInsertValueIntoFirstEmptyIndex() {
         byte[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
 
@@ -38,56 +51,22 @@ public class BoardUnitTest {
     }
 
     @Test
-    public void shouldInsertReturnTrue_whenColumnIsNotFull() {
-        assertTrue(board.insertIntoColumn(0, PLAYER_1));
+    public void shouldChangePlayer() {
+        byte previous = board.getCurrentPlayerID();
+        board.changePlayer();
+
+        assertNotEquals(previous, board.getCurrentPlayerID());
     }
 
     @Test
-    public void shouldPlayerInsertReturnTrue_whenColumnIsNotFull() {
-        assertTrue(board.playerInsertIntoColumn(0));
-    }
+    public void shouldInsertCurrentPlayer() {
+        byte player1 = board.getCurrentPlayerID();
+        board.insertIntoColumn(0);
+        board.changePlayer();
+        byte player2 = board.getCurrentPlayerID();
+        board.insertIntoColumn(0);
 
-    @Test
-    public void shouldInsertReturnFalse_whenColumnIsFull() {
-        board.playerInsertIntoColumn(0);
-        board.playerInsertIntoColumn(0);
-        assertFalse(board.playerInsertIntoColumn(0));
-    }
-
-    @Test
-    public void shouldPlayerInsertReturnFalse_whenColumnIsFull() {
-        board.insertIntoColumn(0, PLAYER_1);
-        board.insertIntoColumn(0, PLAYER_1);
-        assertFalse(board.insertIntoColumn(0, PLAYER_1));
-    }
-
-    @Test
-    public void shouldInsertPlayer_1First() {
-        byte[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
-
-        board.playerInsertIntoColumn(0);
-
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
-    }
-
-    @Test
-    public void shouldChangePlayer_afterPlayerInserted() {
-        byte[][] expectedValues = {{PLAYER_1, PLAYER_2}, {EMPTY, EMPTY}};
-
-        board.playerInsertIntoColumn(0);
-        board.playerInsertIntoColumn(0);
-
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
-    }
-
-    @Test
-    public void shouldNotChangePlayer_whenInsertFailed() {
-        byte[][] expectedValues = {{PLAYER_1, PLAYER_2}, {PLAYER_1, EMPTY}};
-
-        board.playerInsertIntoColumn(0);
-        board.playerInsertIntoColumn(0);
-        board.playerInsertIntoColumn(0);
-        board.playerInsertIntoColumn(1);
+        byte[][] expectedValues = {{player1, player2}, {EMPTY, EMPTY}};
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }
