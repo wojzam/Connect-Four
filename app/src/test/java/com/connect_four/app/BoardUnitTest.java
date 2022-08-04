@@ -72,6 +72,15 @@ public class BoardUnitTest {
     }
 
     @Test
+    public void shouldCheckIfIsColumnFull() {
+        board.insertIntoColumn(0);
+        assertFalse(board.isColumnFull(0));
+
+        board.insertIntoColumn(0);
+        assertTrue(board.isColumnFull(0));
+    }
+
+    @Test
     public void shouldCheckIfIsFull() {
         board.insertIntoColumn(0);
         assertFalse(board.isFull());

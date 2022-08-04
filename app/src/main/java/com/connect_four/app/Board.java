@@ -91,7 +91,16 @@ public class Board {
         return false;
     }
 
-    public boolean isFull(){
+    public boolean isColumnFull(int column) {
+        for (int i = 0; i < height; i++) {
+            if (values[column][i] == EMPTY) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isFull() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (values[i][j] == EMPTY) {
