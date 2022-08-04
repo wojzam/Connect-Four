@@ -51,11 +51,11 @@ public class BoardView {
     private void updateTextView() {
         switch (board.getCurrentPlayerID()) {
             case PLAYER_1:
-                text.setText("Gracz 1");
+                text.setText("Czerwony");
                 text.setTextColor(ContextCompat.getColor(layout.getContext(), R.color.player1));
                 break;
             case PLAYER_2:
-                text.setText("Gracz 2");
+                text.setText("Żółty");
                 text.setTextColor(ContextCompat.getColor(layout.getContext(), R.color.player2));
                 break;
             default:

@@ -2,8 +2,8 @@
 <resources>
     <color name="background">#1E1E1E</color>
     <color name="empty">#595959</color>
-    <color name="player1">#FF912F</color>
-    <color name="player2">#9CFF5F</color>
+    <color name="player1">#FF1D1D</color>
+    <color name="player2">#FFFB16</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
