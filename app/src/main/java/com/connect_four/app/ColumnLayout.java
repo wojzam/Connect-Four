@@ -4,6 +4,8 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import static com.connect_four.app.Board.PLAYER_1;
@@ -21,7 +23,8 @@ public class ColumnLayout extends LinearLayout {
         createDisks(context, height);
     }
 
-    public void refresh(byte[] values){
+    public void refresh(@NonNull byte[] values){
+        assert values.length == disks.size() : "Received invalid values array";
         for (int i = 0; i < disks.size(); i++) {
             switch (values[i]) {
                 case PLAYER_1:
