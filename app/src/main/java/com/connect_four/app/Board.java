@@ -25,6 +25,13 @@ public class Board {
         clearBoard();
     }
 
+    public Board(Board copy) {
+        this.width = copy.getWidth();
+        this.height = copy.getHeight();
+        this.values = copy.getValues();
+        this.currentPlayerID = copy.getCurrentPlayerID();
+    }
+
     public void clearBoard() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
