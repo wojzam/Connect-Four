@@ -11,6 +11,8 @@ public class Board {
     private final int width;
     private final int height;
 
+    private byte currentPlayerID;
+
     public Board() {
         this(7, 6);
     }
@@ -18,7 +20,8 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        values = new byte[width][height];
+        this.values = new byte[width][height];
+        this.currentPlayerID = PLAYER_1;
         clearBoard();
     }
 
@@ -48,6 +51,14 @@ public class Board {
         return false;
     }
 
+    public boolean playerInsertIntoColumn(int column){
+        if(insertIntoColumn(column, currentPlayerID)){
+            changePlayer();
+            return true;
+        }
+        return false;
+    }
+
     public byte[][] getValues() {
         byte[][] valuesCopy = new byte[width][height];
         for (int i = 0; i < width; i++) {
@@ -66,6 +77,18 @@ public class Board {
 
     public int getHeight() {
         return height;
+    }
+
+    public byte getCurrentPlayerID() {
+        return currentPlayerID;
+    }
+
+    private void changePlayer(){
+        if(currentPlayerID == PLAYER_1){
+            currentPlayerID = PLAYER_2;
+        } else{
+            currentPlayerID = PLAYER_1;
+        }
     }
 
     private int findFirstEmptyIndex(int column) {
