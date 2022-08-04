@@ -70,4 +70,75 @@ public class BoardUnitTest {
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }
+
+    @Test
+    public void shouldCheckIfIsFull() {
+        board.insertIntoColumn(0);
+        assertFalse(board.isFull());
+
+        board.insertIntoColumn(0);
+        assertFalse(board.isFull());
+
+        board.insertIntoColumn(1);
+        assertFalse(board.isFull());
+
+        board.insertIntoColumn(1);
+        assertTrue(board.isFull());
+    }
+
+    @Test
+    public void shouldCheckIfWonGame_whenSequenceIsHorizontal() {
+        Board defaultBoard = new Board();
+        defaultBoard.insertIntoColumn(0);
+        defaultBoard.insertIntoColumn(1);
+        defaultBoard.insertIntoColumn(2);
+        defaultBoard.insertIntoColumn(3);
+
+        assertTrue(defaultBoard.wonGame());
+    }
+
+    @Test
+    public void shouldCheckIfWonGame_whenSequenceIsVertical() {
+        Board defaultBoard = new Board();
+        defaultBoard.insertIntoColumn(0);
+        defaultBoard.insertIntoColumn(0);
+        defaultBoard.insertIntoColumn(0);
+        defaultBoard.insertIntoColumn(0);
+
+        assertTrue(defaultBoard.wonGame());
+    }
+
+    @Test
+    public void shouldCheckIfWonGame_whenSequenceIsDiagonalPositiveSlope() {
+        Board defaultBoard = new Board();
+        defaultBoard.insertIntoColumn(0, PLAYER_1);
+        defaultBoard.insertIntoColumn(1, PLAYER_2);
+        defaultBoard.insertIntoColumn(1, PLAYER_1);
+        defaultBoard.insertIntoColumn(2, PLAYER_2);
+        defaultBoard.insertIntoColumn(2, PLAYER_2);
+        defaultBoard.insertIntoColumn(2, PLAYER_1);
+        defaultBoard.insertIntoColumn(3, PLAYER_2);
+        defaultBoard.insertIntoColumn(3, PLAYER_2);
+        defaultBoard.insertIntoColumn(3, PLAYER_2);
+        defaultBoard.insertIntoColumn(3, PLAYER_1);
+
+        assertTrue(defaultBoard.wonGame());
+    }
+
+    @Test
+    public void shouldCheckIfWonGame_whenSequenceIsDiagonalNegativeSlope() {
+        Board defaultBoard = new Board();
+        defaultBoard.insertIntoColumn(3, PLAYER_1);
+        defaultBoard.insertIntoColumn(2, PLAYER_2);
+        defaultBoard.insertIntoColumn(2, PLAYER_1);
+        defaultBoard.insertIntoColumn(1, PLAYER_2);
+        defaultBoard.insertIntoColumn(1, PLAYER_2);
+        defaultBoard.insertIntoColumn(1, PLAYER_1);
+        defaultBoard.insertIntoColumn(0, PLAYER_2);
+        defaultBoard.insertIntoColumn(0, PLAYER_2);
+        defaultBoard.insertIntoColumn(0, PLAYER_2);
+        defaultBoard.insertIntoColumn(0, PLAYER_1);
+
+        assertTrue(defaultBoard.wonGame());
+    }
 }
