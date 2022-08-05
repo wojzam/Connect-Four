@@ -6,14 +6,12 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
-
 import static com.connect_four.app.Board.PLAYER_1;
 import static com.connect_four.app.Board.PLAYER_2;
 
 public class Game {
 
-    private final BoardView boardView;
+    private final BoardLayout boardLayout;
     private final Board board;
     private final LinearLayout mainLayout;
     private final TextView text;
@@ -22,15 +20,14 @@ public class Game {
         this.board = new Board();
         this.mainLayout = mainLayout;
         this.text = new TextView(mainLayout.getContext());
-        this.boardView = new BoardView(mainLayout.getContext(), board);
+        this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
         arrangeViews();
     }
 
     public void restart() {
         board.resetBoard();
-        boardView.refresh();
-
-        addOnClickListeners();
+        boardLayout.refresh();
+        boardLayout.columnsSetOnClickListener(view -> playerClickAction((ColumnLayout) view));
 
         updateText();
     }
@@ -40,30 +37,25 @@ public class Game {
         text.setTextSize(30);
         text.setGravity(Gravity.CENTER);
 
-        mainLayout.addView(boardView);
+        mainLayout.addView(boardLayout);
         mainLayout.addView(text);
     }
 
-    private void addOnClickListeners() {
-        ArrayList<ColumnLayout> columnLayouts = boardView.getColumns();
-        for (int i = 0; i < columnLayouts.size(); i++) {
-            int column = i;
-            columnLayouts.get(i).setOnClickListener(view -> {
-                if (board.insertIntoColumn(column)) {
-                    boardView.refreshColumn(column);
+    private void playerClickAction(ColumnLayout clickedColumn) {
+        int column = clickedColumn.getIndex();
 
-                    if (!hasGameEnded()) {
-                        aiTurn();
-                    }
-                }
-            });
+        if (board.insertIntoColumn(column)) {
+            boardLayout.refreshColumn(column);
+            if (!hasGameEnded()) {
+                aiTurn();
+            }
         }
     }
 
     private boolean hasGameEnded() {
         if (board.wonGame() || board.isFull()) {
             text.setText("Koniec gry");
-            endGame();
+            boardLayout.columnsRemoveOnClickListener();
             return true;
         }
         board.changePlayer();
@@ -75,7 +67,7 @@ public class Game {
     private void aiTurn() {
         int aiColumn = AI.chooseColumn(board);
         board.insertIntoColumn(aiColumn);
-        boardView.refreshColumn(aiColumn);
+        boardLayout.refreshColumn(aiColumn);
         hasGameEnded();
     }
 
@@ -91,12 +83,6 @@ public class Game {
                 break;
             default:
                 text.setText("");
-        }
-    }
-
-    private void endGame() {
-        for (ColumnLayout columnLayout : boardView.getColumns()) {
-            columnLayout.setOnClickListener(null);
         }
     }
 }
