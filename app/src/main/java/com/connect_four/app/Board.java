@@ -20,8 +20,7 @@ public class Board {
         this.width = width;
         this.height = height;
         this.values = new byte[width][height];
-        this.currentPlayerID = PLAYER_1;
-        clearBoard();
+        resetBoard();
     }
 
     public Board(Board copy) {
@@ -31,7 +30,8 @@ public class Board {
         this.currentPlayerID = copy.getCurrentPlayerID();
     }
 
-    public void clearBoard() {
+    public void resetBoard() {
+        currentPlayerID = PLAYER_1;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 values[i][j] = EMPTY;
