@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Connect Four</string>
+    <string name="new_game">NOWA GRA</string>
+    <string name="player_1_won">Wygrał czerwony</string>
+    <string name="player_1_turn">Tura czerwonego</string>
+    <string name="player_2_won">Wygrał żółty</string>
+    <string name="player_2_turn">Tura żółtego</string>
+    <string name="tie_info">Remis</string>
+</resources>
