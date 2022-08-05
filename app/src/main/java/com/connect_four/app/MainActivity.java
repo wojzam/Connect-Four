@@ -1,33 +1,25 @@
 package com.connect_four.app;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LinearLayout boardLayout;
-    private TextView text;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        boardLayout = findViewById(R.id.boardLayout);
-        text = findViewById(R.id.textView);
+        LinearLayout gameLayout = findViewById(R.id.gameLayout);
         Button newGameButton = findViewById(R.id.newGameButton);
-        newGameButton.setOnClickListener(view -> createNewBoard());
+        newGameButton.setOnClickListener(view -> game.restart());
 
-        createNewBoard();
-    }
-
-    private void createNewBoard() {
-        boardLayout.removeAllViews();
-        BoardView boardView = new BoardView(boardLayout, text);
-        boardView.createColumns();
+        game = new Game(gameLayout);
+        game.restart();
     }
 }
