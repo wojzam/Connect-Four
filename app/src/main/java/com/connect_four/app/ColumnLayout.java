@@ -14,13 +14,19 @@ import static com.connect_four.app.Board.PLAYER_2;
 public class ColumnLayout extends LinearLayout {
 
     private final ArrayList<ImageView> disks = new ArrayList<>();
+    private final int index;
 
-    public ColumnLayout(Context context, int height) {
+    public ColumnLayout(Context context, int height, int index) {
         super(context);
+        this.index = index;
         setOrientation(VERTICAL);
         setClickable(true);
         setFocusable(true);
-        createDisks(context, height);
+        createAndAddDisks(context, height);
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public void refresh(@NonNull byte[] values) {
@@ -39,7 +45,7 @@ public class ColumnLayout extends LinearLayout {
         }
     }
 
-    private void createDisks(Context context, int count) {
+    private void createAndAddDisks(Context context, int count) {
         for (int j = 0; j < count; j++) {
             int size = 130; // TODO: size should dynamically fit the screen
             ImageView disk = new ImageView(context);
