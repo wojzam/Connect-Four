@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Connect Four</string>
     <string name="new_game">NEW GAME</string>
+    <string name="settings">SETTINGS</string>
     <string name="player_1_won">Red won</string>
     <string name="player_1_turn">Red turn</string>
     <string name="player_2_won">Yellow won</string>
