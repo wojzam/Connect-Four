@@ -61,7 +61,7 @@ public class Board {
         return insertIntoColumn(column, currentPlayerID);
     }
 
-    public boolean wonGame() {
+    public boolean currentPlayerWonGame() {
         byte id = currentPlayerID;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height - 3; j++) {

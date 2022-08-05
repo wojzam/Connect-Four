@@ -37,7 +37,7 @@ public class AI {
     }
 
     private static MinMaxResult minMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        if (board.wonGame()) {
+        if (board.currentPlayerWonGame()) {
             if (maximizingPlayer) {
                 return new MinMaxResult(-1, LOSING_MOVE_SCORE);
             }

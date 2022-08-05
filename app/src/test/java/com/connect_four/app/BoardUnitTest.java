@@ -103,7 +103,7 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(2);
         defaultBoard.insertIntoColumn(3);
 
-        assertTrue(defaultBoard.wonGame());
+        assertTrue(defaultBoard.currentPlayerWonGame());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(0);
         defaultBoard.insertIntoColumn(0);
 
-        assertTrue(defaultBoard.wonGame());
+        assertTrue(defaultBoard.currentPlayerWonGame());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(3, PLAYER_2);
         defaultBoard.insertIntoColumn(3, PLAYER_1);
 
-        assertTrue(defaultBoard.wonGame());
+        assertTrue(defaultBoard.currentPlayerWonGame());
     }
 
     @Test
@@ -148,6 +148,6 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(0, PLAYER_2);
         defaultBoard.insertIntoColumn(0, PLAYER_1);
 
-        assertTrue(defaultBoard.wonGame());
+        assertTrue(defaultBoard.currentPlayerWonGame());
     }
 }
