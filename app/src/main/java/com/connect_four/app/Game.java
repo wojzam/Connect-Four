@@ -15,12 +15,14 @@ public class Game {
     private final Board board;
     private final LinearLayout mainLayout;
     private final TextView text;
+    private boolean gameOver;
 
     public Game(LinearLayout mainLayout) {
         this.board = new Board();
         this.mainLayout = mainLayout;
         this.text = new TextView(mainLayout.getContext());
         this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
+        this.gameOver = false;
         arrangeViews();
     }
 
@@ -28,6 +30,7 @@ public class Game {
         board.resetBoard();
         boardLayout.refresh();
         boardLayout.columnsSetOnClickListener(view -> playerClickAction((ColumnLayout) view));
+        gameOver = false;
 
         updateText();
     }
@@ -46,39 +49,56 @@ public class Game {
 
         if (board.insertIntoColumn(column)) {
             boardLayout.refreshColumn(column);
-            if (!hasGameEnded()) {
+            finalizeTurn();
+            if (!gameOver) {
                 aiTurn();
             }
         }
     }
 
-    private boolean hasGameEnded() {
-        if (board.wonGame() || board.isFull()) {
-            text.setText("Koniec gry");
-            boardLayout.columnsRemoveOnClickListener();
-            return true;
+    private void finalizeTurn() {
+        if (board.currentPlayerWonGame()) {
+            endGame();
+        } else if (board.isFull()) {
+            endGame();
+            // TODO: This should better be inside updateText()
+            text.setText(R.string.tie_info);
+            text.setTextColor(ContextCompat.getColor(mainLayout.getContext(), R.color.white));
+            return;
+        } else {
+            board.changePlayer();
         }
-        board.changePlayer();
         updateText();
+    }
 
-        return false;
+    private void endGame() {
+        gameOver = true;
+        boardLayout.columnsRemoveOnClickListener();
     }
 
     private void aiTurn() {
         int aiColumn = AI.chooseColumn(board);
         board.insertIntoColumn(aiColumn);
         boardLayout.refreshColumn(aiColumn);
-        hasGameEnded();
+        finalizeTurn();
     }
 
     private void updateText() {
         switch (board.getCurrentPlayerID()) {
             case PLAYER_1:
-                text.setText("Czerwony");
+                if (gameOver) {
+                    text.setText(R.string.player_1_won);
+                } else {
+                    text.setText(R.string.player_1_turn);
+                }
                 text.setTextColor(ContextCompat.getColor(mainLayout.getContext(), R.color.player1));
                 break;
             case PLAYER_2:
-                text.setText("Żółty");
+                if (gameOver) {
+                    text.setText(R.string.player_2_won);
+                } else {
+                    text.setText(R.string.player_2_turn);
+                }
                 text.setTextColor(ContextCompat.getColor(mainLayout.getContext(), R.color.player2));
                 break;
             default:
