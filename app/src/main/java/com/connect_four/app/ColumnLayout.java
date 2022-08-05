@@ -23,7 +23,7 @@ public class ColumnLayout extends LinearLayout {
         createDisks(context, height);
     }
 
-    public void refresh(@NonNull byte[] values){
+    public void refresh(@NonNull byte[] values) {
         assert values.length == disks.size() : "Received invalid values array";
         for (int i = 0; i < disks.size(); i++) {
             switch (values[i]) {
@@ -39,7 +39,7 @@ public class ColumnLayout extends LinearLayout {
         }
     }
 
-    private void createDisks(Context context, int count){
+    private void createDisks(Context context, int count) {
         for (int j = 0; j < count; j++) {
             int size = 130; // TODO: size should dynamically fit the screen
             ImageView disk = new ImageView(context);
