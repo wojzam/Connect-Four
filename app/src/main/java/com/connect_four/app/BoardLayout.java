@@ -6,12 +6,12 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-public class BoardView extends LinearLayout {
+public class BoardLayout extends LinearLayout {
 
     private final Board board;
     private final ArrayList<ColumnLayout> columns = new ArrayList<>();
 
-    public BoardView(Context context, Board board) {
+    public BoardLayout(Context context, Board board) {
         super(context);
         this.board = board;
         setOrientation(HORIZONTAL);
