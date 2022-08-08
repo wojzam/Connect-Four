@@ -1,5 +1,6 @@
 package com.connect_four.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -17,9 +18,16 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout gameLayout = findViewById(R.id.gameLayout);
         Button newGameButton = findViewById(R.id.newGameButton);
+        Button settingsButton = findViewById(R.id.settingsButton);
+
         newGameButton.setOnClickListener(view -> game.restart());
+        settingsButton.setOnClickListener(view -> openSettings());
 
         game = new Game(gameLayout);
         game.restart();
+    }
+
+    private void openSettings(){
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 }
