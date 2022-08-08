@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="single_player"
+        app:title="@string/single_player_title"
+        app:iconSpaceReserved="false"/>
+
+    <SeekBarPreference
+        app:defaultValue="50"
+        app:dependency="single_player"
+        app:key="difficulty"
+        app:showSeekBarValue="true"
+        app:title="@string/difficulty_title"
+        app:iconSpaceReserved="false"/>
+
+</PreferenceScreen>
