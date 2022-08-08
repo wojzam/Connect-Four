@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -23,19 +22,20 @@
             android:id="@+id/settingsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:layout_weight="1"
+            android:background="@drawable/button_bg"
             android:text="@string/settings" />
 
         <Button
             android:id="@+id/newGameButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:layout_weight="1"
+            android:background="@drawable/button_bg"
             android:text="@string/new_game" />
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/gameLayout"
