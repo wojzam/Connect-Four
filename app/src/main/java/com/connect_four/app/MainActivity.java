@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,11 +24,12 @@ public class MainActivity extends AppCompatActivity {
         newGameButton.setOnClickListener(view -> game.restart());
         settingsButton.setOnClickListener(view -> openSettings());
 
-        game = new Game(gameLayout);
+        Settings settings = new Settings(getApplicationContext());
+        game = new Game(gameLayout, settings);
         game.restart();
     }
 
-    private void openSettings(){
+    private void openSettings() {
         startActivity(new Intent(this, SettingsActivity.class));
     }
 }
