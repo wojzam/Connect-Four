@@ -1,4 +1,4 @@
-package com.connect_four.app;
+package com.connect_four.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
+
+import com.connect_four.app.Game;
+import com.connect_four.app.R;
+import com.connect_four.app.Settings;
 
 public class MainActivity extends AppCompatActivity {
 

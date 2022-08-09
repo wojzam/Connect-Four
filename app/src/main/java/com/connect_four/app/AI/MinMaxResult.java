@@ -1,4 +1,4 @@
-package com.connect_four.app;
+package com.connect_four.app.AI;
 
 public class MinMaxResult {
 

@@ -1,4 +1,4 @@
-package com.connect_four.app;
+package com.connect_four.app.Views;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -7,6 +7,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+
+import com.connect_four.app.Board;
+import com.connect_four.app.R;
 
 import static com.connect_four.app.Board.PLAYER_1;
 

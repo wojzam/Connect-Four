@@ -1,8 +1,10 @@
-package com.connect_four.app;
+package com.connect_four.app.Views;
 
 import android.content.Context;
 import android.view.Gravity;
 import android.widget.LinearLayout;
+
+import com.connect_four.app.Board;
 
 import java.util.ArrayList;
 
@@ -30,13 +32,13 @@ public class BoardLayout extends LinearLayout {
     }
 
     public void columnsSetOnClickListener(OnClickListener onClickListener) {
-        for(ColumnLayout columnLayout : columns){
+        for (ColumnLayout columnLayout : columns) {
             columnLayout.setOnClickListener(onClickListener);
         }
     }
 
     public void columnsRemoveOnClickListener() {
-        for(ColumnLayout columnLayout : columns){
+        for (ColumnLayout columnLayout : columns) {
             columnLayout.setOnClickListener(null);
         }
     }

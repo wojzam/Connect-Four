@@ -1,10 +1,12 @@
-package com.connect_four.app;
+package com.connect_four.app.activities;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.connect_four.app.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

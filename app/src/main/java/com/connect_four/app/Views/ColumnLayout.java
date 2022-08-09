@@ -1,10 +1,12 @@
-package com.connect_four.app;
+package com.connect_four.app.Views;
 
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+
+import com.connect_four.app.R;
 
 import java.util.ArrayList;
 

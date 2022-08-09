@@ -2,6 +2,10 @@ package com.connect_four.app;
 
 import android.widget.LinearLayout;
 
+import com.connect_four.app.AI.AI;
+import com.connect_four.app.Views.ColumnLayout;
+import com.connect_four.app.Views.GameViews;
+
 public class Game {
 
     private final Settings settings;

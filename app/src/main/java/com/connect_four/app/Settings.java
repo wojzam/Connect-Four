@@ -19,6 +19,6 @@ public class Settings {
     }
 
     public int getDifficulty() {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(DIFFICULTY_KEY, 5);
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(DIFFICULTY_KEY, 50);
     }
 }

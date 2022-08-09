@@ -1,4 +1,6 @@
-package com.connect_four.app;
+package com.connect_four.app.AI;
+
+import com.connect_four.app.Board;
 
 import java.util.ArrayList;
 import java.util.Collections;
