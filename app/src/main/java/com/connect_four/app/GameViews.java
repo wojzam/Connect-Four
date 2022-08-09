@@ -52,7 +52,7 @@ public class GameViews {
                 text.setTextColor(colorPlayer1);
             } else {
                 text.setText(R.string.player_2_turn);
-                text.setTextColor(colorPlayer1);
+                text.setTextColor(colorPlayer2);
             }
         }
     }
