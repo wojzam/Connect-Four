@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settingsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:background="@drawable/button_bg"
             android:text="@string/settings" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/newGameButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
