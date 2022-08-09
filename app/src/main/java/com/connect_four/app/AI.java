@@ -8,7 +8,7 @@ import static com.connect_four.app.Board.PLAYER_2;
 
 public class AI {
 
-    private static final int DEPTH = 5;
+    private static final int DEFAULT_DEPTH = 5;
     private static final int WINING_MOVE_SCORE = 1000000000;
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
@@ -16,11 +16,16 @@ public class AI {
     private static final byte AI_ID = PLAYER_2;
     private static final byte HUMAN_ID = PLAYER_1;
 
-    public static int chooseColumn(Board board) {
+    public static int chooseColumn(Board board, int depth) {
+        assert depth > 0 : "Depth should be greater than zero";
         Board boardCopy = new Board(board);
         boardCopy.changePlayer();
 
-        return minMax(boardCopy, DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
+        return minMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
+    }
+
+    public static int chooseColumn(Board board) {
+        return chooseColumn(board, DEFAULT_DEPTH);
     }
 
     private static ArrayList<Integer> getPossibleMoves(Board board) {
