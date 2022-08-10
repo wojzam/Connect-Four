@@ -1,6 +1,7 @@
 package com.connect_four.app.Views;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -66,7 +67,8 @@ public class GameViews {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, dpToPixel(30, mainLayout.getContext()), 0, 0);
         text.setLayoutParams(layoutParams);
-        text.setTextSize(30);
+        text.setTypeface(Typeface.SERIF);
+        text.setTextSize(25);
         text.setGravity(Gravity.CENTER);
 
         mainLayout.addView(boardLayout);
