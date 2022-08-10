@@ -15,11 +15,12 @@ import static com.connect_four.app.Board.PLAYER_2;
 
 public class ColumnLayout extends LinearLayout {
 
-    private final ArrayList<ImageView> disks = new ArrayList<>();
+    private final ImageView[] disks;
     private final int index;
 
     public ColumnLayout(Context context, int height, int index) {
         super(context);
+        this.disks = new ImageView[height];
         this.index = index;
         setOrientation(VERTICAL);
         setClickable(true);
@@ -32,17 +33,17 @@ public class ColumnLayout extends LinearLayout {
     }
 
     public void refresh(@NonNull byte[] values) {
-        assert values.length == disks.size() : "Received invalid values array";
-        for (int i = 0; i < disks.size(); i++) {
+        assert values.length == disks.length : "Received invalid values array";
+        for (int i = 0; i < disks.length; i++) {
             switch (values[i]) {
                 case PLAYER_1:
-                    disks.get(i).setImageResource(R.drawable.disk_player1);
+                    disks[i].setImageResource(R.drawable.disk_player1);
                     break;
                 case PLAYER_2:
-                    disks.get(i).setImageResource(R.drawable.disk_player2);
+                    disks[i].setImageResource(R.drawable.disk_player2);
                     break;
                 default:
-                    disks.get(i).setImageResource(R.drawable.disk_empty);
+                    disks[i].setImageResource(R.drawable.disk_empty);
             }
         }
     }
@@ -56,8 +57,8 @@ public class ColumnLayout extends LinearLayout {
             disk.setLayoutParams(layoutParams);
             disk.setImageResource(R.drawable.disk_empty);
 
+            disks[j] = disk;
             this.addView(disk, 0);
-            disks.add(disk);
         }
     }
 }
