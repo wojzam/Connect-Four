@@ -45,10 +45,9 @@ public class BoardLayout extends LinearLayout {
 
     private void createAndAddColumns(Context context) {
         for (int i = 0; i < board.getWidth(); i++) {
-            ColumnLayout columnLayout = new ColumnLayout(context, board.getHeight(), i);
+            ColumnLayout columnLayout = new ColumnLayout(context, board.getColumnValues(i), i);
             addView(columnLayout);
             columns.add(columnLayout);
         }
     }
-
 }
