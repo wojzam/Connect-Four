@@ -1,4 +1,4 @@
-package com.connect_four.app.Views;
+package com.connect_four.app.views;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -31,6 +31,10 @@ public class GameViews {
         this.colorPlayer2 = ContextCompat.getColor(mainLayout.getContext(), R.color.player2);
         this.colorNeutral = ContextCompat.getColor(mainLayout.getContext(), R.color.white);
         arrangeViews(mainLayout);
+    }
+
+    private static int dpToPixel(float dp, Context context) {
+        return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public BoardLayout getBoardLayout() {
@@ -73,9 +77,5 @@ public class GameViews {
 
         mainLayout.addView(boardLayout);
         mainLayout.addView(text);
-    }
-
-    private static int dpToPixel(float dp, Context context) {
-        return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

@@ -1,4 +1,4 @@
-package com.connect_four.app.Views;
+package com.connect_four.app.views;
 
 import android.content.Context;
 import android.view.Gravity;

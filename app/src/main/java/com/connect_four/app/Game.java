@@ -4,9 +4,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.LinearLayout;
 
-import com.connect_four.app.AI.AI;
-import com.connect_four.app.Views.ColumnLayout;
-import com.connect_four.app.Views.GameViews;
+import com.connect_four.app.ai.AI;
+import com.connect_four.app.views.ColumnLayout;
+import com.connect_four.app.views.GameViews;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,13 +52,13 @@ public class Game {
         if (board.insertIntoColumn(column)) {
             gameViews.getBoardLayout().refreshColumn(column);
             finalizeTurn();
-            if (isNowAITurn()) {
+            if (shouldAIMakeItsTurn()) {
                 aiTurn();
             }
         }
     }
 
-    private boolean isNowAITurn() {
+    private boolean shouldAIMakeItsTurn() {
         return settings.getSinglePlayer() && !gameOver;
     }
 

@@ -1,4 +1,4 @@
-package com.connect_four.app.Views;
+package com.connect_four.app.views;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -15,8 +15,8 @@ import static com.connect_four.app.Board.PLAYER_2;
 public class ColumnLayout extends LinearLayout {
 
     private final ImageView[] disks;
-    private byte[] values;
     private final int index;
+    private byte[] values;
 
     public ColumnLayout(@NonNull Context context, @NonNull byte[] values, int index) {
         super(context);

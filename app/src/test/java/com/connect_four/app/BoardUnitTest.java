@@ -9,8 +9,8 @@ import static com.connect_four.app.Board.EMPTY;
 import static com.connect_four.app.Board.PLAYER_1;
 import static com.connect_four.app.Board.PLAYER_2;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BoardUnitTest {
 

@@ -1,4 +1,4 @@
-package com.connect_four.app.AI;
+package com.connect_four.app.ai;
 
 import com.connect_four.app.Board;
 
