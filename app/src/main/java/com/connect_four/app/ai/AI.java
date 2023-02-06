@@ -10,8 +10,6 @@ import static com.connect_four.app.Disk.PLAYER_1;
 import static com.connect_four.app.Disk.PLAYER_2;
 
 public class AI {
-
-    private static final int DEFAULT_DEPTH = 5;
     private static final int WINING_MOVE_SCORE = 1000000000;
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
@@ -25,10 +23,6 @@ public class AI {
         boardCopy.changePlayer();
 
         return minMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
-    }
-
-    public static int chooseColumn(Board board) {
-        return chooseColumn(board, DEFAULT_DEPTH);
     }
 
     private static ArrayList<Integer> getPossibleMoves(Board board) {
