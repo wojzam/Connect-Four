@@ -22,7 +22,7 @@ public class BoardUnitTest {
     }
 
     @Test
-    public void shouldInitializeArray() {
+    public void shouldInitializeEmptyBoard() {
         Board customBoard = new Board(2, 3);
         Disk[][] expectedValues = {{EMPTY, EMPTY, EMPTY}, {EMPTY, EMPTY, EMPTY}};
 
@@ -30,12 +30,12 @@ public class BoardUnitTest {
     }
 
     @Test
-    public void shouldReturnTrue_whenColumnIsNotFull() {
+    public void shouldReturnTrueOnInsert_whenColumnIsNotFull() {
         assertTrue(board.insertIntoColumn(0));
     }
 
     @Test
-    public void shouldReturnFalse_whenColumnIsFull() {
+    public void shouldReturnFalseOnInsert_whenColumnIsFull() {
         board.insertIntoColumn(0);
         board.insertIntoColumn(0);
         assertFalse(board.insertIntoColumn(0));
@@ -46,6 +46,36 @@ public class BoardUnitTest {
         Disk[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
 
         board.insertIntoColumn(0, PLAYER_1);
+
+        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+    }
+
+    @Test
+    public void shouldRemoveTopDisk() {
+        Disk[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}};
+
+        board.insertIntoColumn(0, PLAYER_1);
+        board.removeTopDiskFromColumn(0);
+
+        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+    }
+
+    @Test
+    public void shouldRemoveTopDisk_whenColumnIsFull() {
+        Disk[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
+
+        board.insertIntoColumn(0, PLAYER_1);
+        board.insertIntoColumn(0, PLAYER_1);
+        board.removeTopDiskFromColumn(0);
+
+        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+    }
+
+    @Test
+    public void shouldNotRemoveTopDisk_whenColumnIsEmpty() {
+        Disk[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}};
+
+        board.removeTopDiskFromColumn(0);
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }
@@ -81,7 +111,20 @@ public class BoardUnitTest {
     }
 
     @Test
-    public void shouldCheckIfIsFull() {
+    public void shouldResetBoard() {
+        Disk[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}};
+
+        board.insertIntoColumn(0);
+        board.insertIntoColumn(0);
+        board.insertIntoColumn(1);
+        board.insertIntoColumn(1);
+        board.resetBoard();
+
+        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+    }
+
+    @Test
+    public void shouldCheckIfBoardIsFull() {
         board.insertIntoColumn(0);
         assertFalse(board.isFull());
 

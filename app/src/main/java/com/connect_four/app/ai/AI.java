@@ -10,12 +10,12 @@ import static com.connect_four.app.Disk.PLAYER_1;
 import static com.connect_four.app.Disk.PLAYER_2;
 
 public class AI {
+
+    public static final Disk AI_DISK = PLAYER_2;
+    public static final Disk HUMAN_DISK = PLAYER_1;
     private static final int WINING_MOVE_SCORE = 1000000000;
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
-
-    private static final Disk AI_DISK = PLAYER_2;
-    private static final Disk HUMAN_DISK = PLAYER_1;
 
     public static int chooseColumn(Board board, int depth) {
         assert depth > 0 : "Depth should be greater than zero";
