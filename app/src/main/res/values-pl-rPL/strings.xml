@@ -10,5 +10,6 @@
     <string name="single_player_title">Gra jednoosobowa</string>
     <string name="new_game">NOWA GRA</string>
     <string name="settings">USTAWIENIA</string>
+    <string name="undo">COFNIJ</string>
     <string name="title_activity_settings">Ustawienia</string>
 </resources>

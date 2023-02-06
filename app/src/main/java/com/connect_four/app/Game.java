@@ -5,6 +5,9 @@ import android.os.Looper;
 import android.widget.LinearLayout;
 
 import com.connect_four.app.ai.AI;
+import com.connect_four.app.commands.Command;
+import com.connect_four.app.commands.CommandHistory;
+import com.connect_four.app.commands.PlayTurn;
 import com.connect_four.app.views.ColumnLayout;
 import com.connect_four.app.views.GameViews;
 
@@ -16,6 +19,7 @@ public class Game {
     private final Settings settings;
     private final Board board;
     private final GameViews gameViews;
+    private final CommandHistory commands;
     private ExecutorService aiTurnExecutor;
     private boolean gameOver;
 
@@ -23,16 +27,20 @@ public class Game {
         this.settings = settings;
         this.board = new Board();
         this.gameViews = new GameViews(mainLayout, board);
+        this.commands = new CommandHistory();
         this.aiTurnExecutor = Executors.newSingleThreadExecutor();
         this.gameOver = false;
 
+        gameViews.getUndoButton().setOnClickListener(view -> undoTurn());
         gameViews.updateTextToDescribeBoardStatus();
     }
 
     public void restart() {
         board.resetBoard();
+        commands.clear();
         gameViews.getBoardLayout().refresh();
         gameViews.getBoardLayout().columnsSetOnClickListener(view -> playerClickAction((ColumnLayout) view));
+        gameViews.getUndoButton().setEnabled(true);
         gameOver = false;
 
         resetExecutor();
@@ -46,11 +54,25 @@ public class Game {
         aiTurnExecutor = Executors.newSingleThreadExecutor();
     }
 
+    private void playTurn(int chosenColumn) {
+        Command playTurn = new PlayTurn(board, gameViews, chosenColumn);
+        playTurn.execute();
+        commands.push(playTurn);
+    }
+
+    private void undoTurn() {
+        commands.undoLastCommand();
+        if (shouldAIMakeItsTurn()) {
+            commands.undoLastCommand();
+        }
+        gameViews.updateTextToDescribeBoardStatus();
+    }
+
     private void playerClickAction(ColumnLayout clickedColumn) {
         int column = clickedColumn.getIndex();
 
-        if (board.insertIntoColumn(column)) {
-            gameViews.getBoardLayout().refreshColumn(column);
+        if (!board.isColumnFull(column)) {
+            playTurn(column);
             finalizeTurn();
             if (shouldAIMakeItsTurn()) {
                 aiTurn();
@@ -63,9 +85,7 @@ public class Game {
     }
 
     private void finalizeTurn() {
-        if (board.currentPlayerWonGame()) {
-            endGame();
-        } else if (board.isFull()) {
+        if (board.currentPlayerWonGame() || board.isFull()) {
             endGame();
         } else {
             board.changePlayer();
@@ -76,10 +96,12 @@ public class Game {
     private void endGame() {
         gameOver = true;
         gameViews.getBoardLayout().columnsRemoveOnClickListener();
+        gameViews.getUndoButton().setEnabled(false);
     }
 
     private void aiTurn() {
         gameViews.getBoardLayout().columnsRemoveOnClickListener();
+        gameViews.getUndoButton().setEnabled(false);
         final Handler aiTurnHandler = new Handler(Looper.getMainLooper());
 
         aiTurnExecutor.execute(() -> {
@@ -88,11 +110,12 @@ public class Game {
                 return;
             }
             aiTurnHandler.post(() -> {
-                board.insertIntoColumn(aiColumn);
-                gameViews.getBoardLayout().refreshColumn(aiColumn);
+                playTurn(aiColumn);
                 gameViews.getBoardLayout().columnsSetOnClickListener(view -> playerClickAction((ColumnLayout) view));
+                gameViews.getUndoButton().setEnabled(true);
                 finalizeTurn();
             });
         });
     }
+
 }

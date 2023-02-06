@@ -62,6 +62,15 @@ public class Board {
         return insertIntoColumn(column, currentPlayerDisk);
     }
 
+    public void removeTopDiskFromColumn(int column) {
+        for (int i = height - 1; i >= 0; i--) {
+            if (values[column][i] != EMPTY) {
+                values[column][i] = EMPTY;
+                return;
+            }
+        }
+    }
+
     public boolean currentPlayerWonGame() {
         Disk id = currentPlayerDisk;
         for (int i = 0; i < width; i++) {

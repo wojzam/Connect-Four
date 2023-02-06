@@ -13,6 +13,7 @@
     <!-- Buttons -->
     <string name="new_game">NEW GAME</string>
     <string name="settings">SETTINGS</string>
+    <string name="undo">UNDO</string>
 
     <!-- Settings -->
     <string name="single_player_title">Single-player</string>

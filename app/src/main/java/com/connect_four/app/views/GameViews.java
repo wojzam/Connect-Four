@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,14 +21,16 @@ public class GameViews {
     private final Board board;
     private final BoardLayout boardLayout;
     private final TextView text;
+    private final Button undoButton;
     private final int colorPlayer1;
     private final int colorPlayer2;
     private final int colorNeutral;
 
     public GameViews(LinearLayout mainLayout, Board board) {
         this.board = board;
-        this.text = new TextView(mainLayout.getContext());
         this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
+        this.text = new TextView(mainLayout.getContext());
+        this.undoButton = new Button(mainLayout.getContext());
         this.colorPlayer1 = ContextCompat.getColor(mainLayout.getContext(), R.color.player1);
         this.colorPlayer2 = ContextCompat.getColor(mainLayout.getContext(), R.color.player2);
         this.colorNeutral = ContextCompat.getColor(mainLayout.getContext(), R.color.white);
@@ -40,6 +43,10 @@ public class GameViews {
 
     public BoardLayout getBoardLayout() {
         return boardLayout;
+    }
+
+    public Button getUndoButton() {
+        return undoButton;
     }
 
     public void updateTextToDescribeBoardStatus() {
@@ -68,15 +75,21 @@ public class GameViews {
 
     private void arrangeViews(LinearLayout mainLayout) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER;
         layoutParams.setMargins(0, dpToPixel(30, mainLayout.getContext()), 0, 0);
+
         text.setLayoutParams(layoutParams);
         text.setTypeface(Typeface.SERIF);
         text.setTextSize(25);
-        text.setGravity(Gravity.CENTER);
+
+        undoButton.setText(R.string.undo);
+        undoButton.setLayoutParams(layoutParams);
+        undoButton.setBackgroundResource(R.drawable.button_bg);
 
         mainLayout.addView(boardLayout);
         mainLayout.addView(text);
+        mainLayout.addView(undoButton);
     }
 }
