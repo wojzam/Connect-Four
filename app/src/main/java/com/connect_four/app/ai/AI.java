@@ -49,7 +49,7 @@ public class AI {
             return new MinMaxResult(-1, TIE_MOVE_SCORE);
         }
         if (depth == 0) {
-            return new MinMaxResult(-1, board.evaluate(AI_DISK));
+            return new MinMaxResult(-1, BoardEvaluator.evaluate(board, AI_DISK));
         }
 
         ArrayList<Integer> possibleMoves = getPossibleMoves(board);
