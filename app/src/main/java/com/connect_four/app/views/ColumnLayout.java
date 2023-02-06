@@ -6,19 +6,18 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
+import com.connect_four.app.Disk;
 import com.connect_four.app.R;
 
-import static com.connect_four.app.Board.EMPTY;
-import static com.connect_four.app.Board.PLAYER_1;
-import static com.connect_four.app.Board.PLAYER_2;
+import static com.connect_four.app.Disk.EMPTY;
 
 public class ColumnLayout extends LinearLayout {
 
     private final ImageView[] disks;
     private final int index;
-    private byte[] values;
+    private Disk[] values;
 
-    public ColumnLayout(@NonNull Context context, @NonNull byte[] values, int index) {
+    public ColumnLayout(@NonNull Context context, @NonNull Disk[] values, int index) {
         super(context);
         this.disks = new ImageView[values.length];
         this.values = values;
@@ -31,7 +30,7 @@ public class ColumnLayout extends LinearLayout {
         return index;
     }
 
-    public void refresh(@NonNull byte[] newValues) {
+    public void refresh(@NonNull Disk[] newValues) {
         assert newValues.length == values.length : "Received invalid values array";
         for (int i = 0; i < values.length; i++) {
             if (values[i] != newValues[i]) {
@@ -42,7 +41,7 @@ public class ColumnLayout extends LinearLayout {
         values = newValues;
     }
 
-    private void animateDisk(byte value, int index) {
+    private void animateDisk(Disk value, int index) {
         final int diskHeight = disks[index].getHeight();
         if (value == EMPTY) {
             disks[index].setScaleX(0);
@@ -54,7 +53,7 @@ public class ColumnLayout extends LinearLayout {
         }
     }
 
-    private void setDiskImageResource(ImageView disk, byte value) {
+    private void setDiskImageResource(ImageView disk, Disk value) {
         assert disk != null : "Disk ImageView is null";
         switch (value) {
             case PLAYER_1:

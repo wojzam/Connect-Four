@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.connect_four.app.Board.EMPTY;
-import static com.connect_four.app.Board.PLAYER_1;
-import static com.connect_four.app.Board.PLAYER_2;
+import static com.connect_four.app.Disk.EMPTY;
+import static com.connect_four.app.Disk.PLAYER_1;
+import static com.connect_four.app.Disk.PLAYER_2;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -24,7 +24,7 @@ public class BoardUnitTest {
     @Test
     public void shouldInitializeArray() {
         Board customBoard = new Board(2, 3);
-        byte[][] expectedValues = {{EMPTY, EMPTY, EMPTY}, {EMPTY, EMPTY, EMPTY}};
+        Disk[][] expectedValues = {{EMPTY, EMPTY, EMPTY}, {EMPTY, EMPTY, EMPTY}};
 
         assertTrue(Arrays.deepEquals(customBoard.getValues(), expectedValues));
     }
@@ -43,7 +43,7 @@ public class BoardUnitTest {
 
     @Test
     public void shouldInsertValueIntoFirstEmptyIndex() {
-        byte[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
+        Disk[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
 
         board.insertIntoColumn(0, PLAYER_1);
 
@@ -52,21 +52,21 @@ public class BoardUnitTest {
 
     @Test
     public void shouldChangePlayer() {
-        byte previous = board.getCurrentPlayerID();
+        Disk previous = board.getCurrentPlayerDisk();
         board.changePlayer();
 
-        assertNotEquals(previous, board.getCurrentPlayerID());
+        assertNotEquals(previous, board.getCurrentPlayerDisk());
     }
 
     @Test
     public void shouldInsertCurrentPlayer() {
-        byte player1 = board.getCurrentPlayerID();
+        Disk player1 = board.getCurrentPlayerDisk();
         board.insertIntoColumn(0);
         board.changePlayer();
-        byte player2 = board.getCurrentPlayerID();
+        Disk player2 = board.getCurrentPlayerDisk();
         board.insertIntoColumn(0);
 
-        byte[][] expectedValues = {{player1, player2}, {EMPTY, EMPTY}};
+        Disk[][] expectedValues = {{player1, player2}, {EMPTY, EMPTY}};
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }

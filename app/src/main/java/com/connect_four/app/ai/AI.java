@@ -1,12 +1,13 @@
 package com.connect_four.app.ai;
 
 import com.connect_four.app.Board;
+import com.connect_four.app.Disk;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.connect_four.app.Board.PLAYER_1;
-import static com.connect_four.app.Board.PLAYER_2;
+import static com.connect_four.app.Disk.PLAYER_1;
+import static com.connect_four.app.Disk.PLAYER_2;
 
 public class AI {
 
@@ -15,8 +16,8 @@ public class AI {
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
 
-    private static final byte AI_ID = PLAYER_2;
-    private static final byte HUMAN_ID = PLAYER_1;
+    private static final Disk AI_DISK = PLAYER_2;
+    private static final Disk HUMAN_DISK = PLAYER_1;
 
     public static int chooseColumn(Board board, int depth) {
         assert depth > 0 : "Depth should be greater than zero";
@@ -54,7 +55,7 @@ public class AI {
             return new MinMaxResult(-1, TIE_MOVE_SCORE);
         }
         if (depth == 0) {
-            return new MinMaxResult(-1, board.evaluate(AI_ID));
+            return new MinMaxResult(-1, board.evaluate(AI_DISK));
         }
 
         ArrayList<Integer> possibleMoves = getPossibleMoves(board);
@@ -66,7 +67,7 @@ public class AI {
             score = Integer.MIN_VALUE;
             for (int col : possibleMoves) {
                 Board boardCopy = new Board(board);
-                boardCopy.insertIntoColumn(col, AI_ID);
+                boardCopy.insertIntoColumn(col, AI_DISK);
                 int new_score = minMax(boardCopy, depth - 1, alpha, beta, false).getScore();
                 if (new_score > score) {
                     score = new_score;
@@ -83,7 +84,7 @@ public class AI {
             score = Integer.MAX_VALUE;
             for (int col : possibleMoves) {
                 Board boardCopy = new Board(board);
-                boardCopy.insertIntoColumn(col, HUMAN_ID);
+                boardCopy.insertIntoColumn(col, HUMAN_DISK);
                 int new_score = minMax(boardCopy, depth - 1, alpha, beta, true).getScore();
                 if (new_score < score) {
                     score = new_score;

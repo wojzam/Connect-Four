@@ -2,15 +2,16 @@ package com.connect_four.app;
 
 import java.util.Arrays;
 
+import static com.connect_four.app.Disk.EMPTY;
+import static com.connect_four.app.Disk.PLAYER_1;
+import static com.connect_four.app.Disk.PLAYER_2;
+
 public class Board {
 
-    public static final byte EMPTY = 0;
-    public static final byte PLAYER_1 = 1;
-    public static final byte PLAYER_2 = 2;
-    private final byte[][] values;
+    private final Disk[][] values;
     private final int width;
     private final int height;
-    private byte currentPlayerID;
+    private Disk currentPlayerDisk;
 
     public Board() {
         this(7, 6);
@@ -19,7 +20,7 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        this.values = new byte[width][height];
+        this.values = new Disk[width][height];
         resetBoard();
     }
 
@@ -27,11 +28,11 @@ public class Board {
         this.width = copy.getWidth();
         this.height = copy.getHeight();
         this.values = copy.getValues();
-        this.currentPlayerID = copy.getCurrentPlayerID();
+        this.currentPlayerDisk = copy.getCurrentPlayerDisk();
     }
 
     public void resetBoard() {
-        currentPlayerID = PLAYER_1;
+        currentPlayerDisk = PLAYER_1;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 values[i][j] = EMPTY;
@@ -48,7 +49,7 @@ public class Board {
         }
     }
 
-    public boolean insertIntoColumn(int column, byte value) {
+    public boolean insertIntoColumn(int column, Disk value) {
         int index = findFirstEmptyIndex(column);
         if (index >= 0) {
             values[column][index] = value;
@@ -58,11 +59,11 @@ public class Board {
     }
 
     public boolean insertIntoColumn(int column) {
-        return insertIntoColumn(column, currentPlayerID);
+        return insertIntoColumn(column, currentPlayerDisk);
     }
 
     public boolean currentPlayerWonGame() {
-        byte id = currentPlayerID;
+        Disk id = currentPlayerDisk;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height - 3; j++) {
                 if (values[i][j] == id && values[i][j + 1] == id && values[i][j + 2] == id && values[i][j + 3] == id) {
@@ -97,33 +98,33 @@ public class Board {
         return false;
     }
 
-    private int getSequenceScore(byte[] sequence, byte playerID) {
+    private int getSequenceScore(Disk[] sequence, Disk playerID) {
         int score = 0;
-        int playerDiskCount = 0;
+        int playerDiscCount = 0;
         int emptyCount = 0;
 
-        for (byte value : sequence) {
+        for (Disk value : sequence) {
             if (value == playerID) {
-                playerDiskCount += 1;
+                playerDiscCount += 1;
             } else if (value == EMPTY) {
                 emptyCount += 1;
             }
         }
 
-        if (playerDiskCount == 4) {
+        if (playerDiscCount == 4) {
             score += 100;
-        } else if (playerDiskCount == 3 && emptyCount == 1) {
+        } else if (playerDiscCount == 3 && emptyCount == 1) {
             score += 5;
-        } else if (playerDiskCount == 2 && emptyCount == 2) {
+        } else if (playerDiscCount == 2 && emptyCount == 2) {
             score += 2;
-        } else if (playerDiskCount == 0 && emptyCount == 1) {
+        } else if (playerDiscCount == 0 && emptyCount == 1) {
             score -= 4;
         }
         return score;
     }
 
-    public int evaluate(byte playerID) {
-        byte[] sequence = new byte[4];
+    public int evaluate(Disk playerID) {
+        Disk[] sequence = new Disk[4];
         int score = 0;
 
         for (int i = 0; i < width; i++) {
@@ -184,15 +185,15 @@ public class Board {
         return true;
     }
 
-    public byte[][] getValues() {
-        byte[][] valuesCopy = new byte[width][height];
+    public Disk[][] getValues() {
+        Disk[][] valuesCopy = new Disk[width][height];
         for (int i = 0; i < width; i++) {
             valuesCopy[i] = getColumnValues(i);
         }
         return valuesCopy;
     }
 
-    public byte[] getColumnValues(int column) {
+    public Disk[] getColumnValues(int column) {
         return Arrays.copyOf(values[column], height);
     }
 
@@ -204,15 +205,15 @@ public class Board {
         return height;
     }
 
-    public byte getCurrentPlayerID() {
-        return currentPlayerID;
+    public Disk getCurrentPlayerDisk() {
+        return currentPlayerDisk;
     }
 
     public void changePlayer() {
-        if (currentPlayerID == PLAYER_1) {
-            currentPlayerID = PLAYER_2;
+        if (currentPlayerDisk == PLAYER_1) {
+            currentPlayerDisk = PLAYER_2;
         } else {
-            currentPlayerID = PLAYER_1;
+            currentPlayerDisk = PLAYER_1;
         }
     }
 

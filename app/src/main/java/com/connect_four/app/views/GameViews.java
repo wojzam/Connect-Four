@@ -10,9 +10,10 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.connect_four.app.Board;
+import com.connect_four.app.Disk;
 import com.connect_four.app.R;
 
-import static com.connect_four.app.Board.PLAYER_1;
+import static com.connect_four.app.Disk.PLAYER_1;
 
 public class GameViews {
 
@@ -42,7 +43,7 @@ public class GameViews {
     }
 
     public void updateTextToDescribeBoardStatus() {
-        final int currentPlayerID = board.getCurrentPlayerID();
+        final Disk currentPlayerID = board.getCurrentPlayerDisk();
         if (board.currentPlayerWonGame()) {
             if (currentPlayerID == PLAYER_1) {
                 text.setText(R.string.player_1_won);
