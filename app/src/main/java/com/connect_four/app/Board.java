@@ -8,13 +8,15 @@ import static com.connect_four.app.Disk.PLAYER_2;
 
 public class Board {
 
+    public static final int WIDTH_DEFAULT = 7;
+    public static final int HEIGHT_DEFAULT = 6;
     private final Disk[][] values;
     private final int width;
     private final int height;
     private Disk currentPlayerDisk;
 
     public Board() {
-        this(7, 6);
+        this(WIDTH_DEFAULT, HEIGHT_DEFAULT);
     }
 
     public Board(int width, int height) {
