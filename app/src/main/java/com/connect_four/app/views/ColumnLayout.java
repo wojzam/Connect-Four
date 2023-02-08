@@ -71,6 +71,7 @@ public class ColumnLayout extends LinearLayout {
         setOrientation(VERTICAL);
         setClickable(true);
         setFocusable(true);
+        setTag(index);
     }
 
     private void createAndAddDisks(Context context) {
