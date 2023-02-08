@@ -21,7 +21,6 @@ public class Game {
     private final GameViews gameViews;
     private final CommandHistory commands;
     private ExecutorService aiTurnExecutor;
-    private boolean gameOver;
 
     public Game(LinearLayout mainLayout, Settings settings) {
         this.settings = settings;
@@ -29,7 +28,6 @@ public class Game {
         this.gameViews = new GameViews(mainLayout, board);
         this.commands = new CommandHistory();
         this.aiTurnExecutor = Executors.newSingleThreadExecutor();
-        this.gameOver = false;
 
         gameViews.getUndoButton().setOnClickListener(view -> undoTurn());
         gameViews.updateTextToDescribeBoardStatus();
@@ -39,9 +37,8 @@ public class Game {
         board.resetBoard();
         commands.clear();
         gameViews.getBoardLayout().refresh();
-        gameViews.getBoardLayout().columnsSetOnClickListener(view -> playerClickAction((ColumnLayout) view));
+        gameViews.getBoardLayout().columnsSetOnClickListener(view -> columnClickAction((ColumnLayout) view));
         gameViews.getUndoButton().setEnabled(true);
-        gameOver = false;
 
         resetExecutor();
         gameViews.updateTextToDescribeBoardStatus();
@@ -62,26 +59,32 @@ public class Game {
 
     private void undoTurn() {
         commands.undoLastCommand();
-        if (shouldAIMakeItsTurn()) {
+        if (isAIOpponentEnabled()) {
             commands.undoLastCommand();
         }
         gameViews.updateTextToDescribeBoardStatus();
     }
 
-    private void playerClickAction(ColumnLayout clickedColumn) {
+    private void columnClickAction(ColumnLayout clickedColumn) {
         int column = clickedColumn.getIndex();
 
-        if (!board.isColumnFull(column)) {
+        if (board.canInsertInColumn(column)) {
             playTurn(column);
             finalizeTurn();
-            if (shouldAIMakeItsTurn()) {
-                aiTurn();
-            }
         }
     }
 
-    private boolean shouldAIMakeItsTurn() {
-        return settings.getSinglePlayer() && !gameOver;
+    private boolean isAIOpponentEnabled() {
+        return settings.getSinglePlayer();
+    }
+
+    private boolean isAIOpponentTurn() {
+        return board.getCurrentPlayerDisk() == AI.AI_DISK;
+    }
+
+    private void endGame() {
+        gameViews.getBoardLayout().columnsRemoveOnClickListener();
+        gameViews.getUndoButton().setEnabled(false);
     }
 
     private void finalizeTurn() {
@@ -89,14 +92,11 @@ public class Game {
             endGame();
         } else {
             board.changePlayer();
+            if (isAIOpponentEnabled() && isAIOpponentTurn()) {
+                aiTurn();
+            }
         }
         gameViews.updateTextToDescribeBoardStatus();
-    }
-
-    private void endGame() {
-        gameOver = true;
-        gameViews.getBoardLayout().columnsRemoveOnClickListener();
-        gameViews.getUndoButton().setEnabled(false);
     }
 
     private void aiTurn() {
@@ -111,7 +111,7 @@ public class Game {
             }
             aiTurnHandler.post(() -> {
                 playTurn(aiColumn);
-                gameViews.getBoardLayout().columnsSetOnClickListener(view -> playerClickAction((ColumnLayout) view));
+                gameViews.getBoardLayout().columnsSetOnClickListener(view -> columnClickAction((ColumnLayout) view));
                 gameViews.getUndoButton().setEnabled(true);
                 finalizeTurn();
             });

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
 import com.connect_four.app.Board;
@@ -21,7 +22,7 @@ public class GameViews {
     private final Board board;
     private final BoardLayout boardLayout;
     private final TextView text;
-    private final Button undoButton;
+    private final AppCompatButton undoButton;
     private final int colorPlayer1;
     private final int colorPlayer2;
     private final int colorNeutral;
@@ -30,7 +31,7 @@ public class GameViews {
         this.board = board;
         this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
         this.text = new TextView(mainLayout.getContext());
-        this.undoButton = new Button(mainLayout.getContext());
+        this.undoButton = new AppCompatButton(mainLayout.getContext());
         this.colorPlayer1 = ContextCompat.getColor(mainLayout.getContext(), R.color.player1);
         this.colorPlayer2 = ContextCompat.getColor(mainLayout.getContext(), R.color.player2);
         this.colorNeutral = ContextCompat.getColor(mainLayout.getContext(), R.color.white);

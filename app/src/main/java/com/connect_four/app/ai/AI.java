@@ -29,7 +29,7 @@ public class AI {
         ArrayList<Integer> possibleMoves = new ArrayList<>();
 
         for (int i = 0; i < board.getWidth(); i++) {
-            if (!board.isColumnFull(i)) {
+            if (board.canInsertInColumn(i)) {
                 possibleMoves.add(i);
             }
         }

@@ -111,13 +111,13 @@ public class Board {
         return false;
     }
 
-    public boolean isColumnFull(int column) {
+    public boolean canInsertInColumn(int column) {
         for (int i = 0; i < height; i++) {
             if (values[column][i] == EMPTY) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public boolean isFull() {

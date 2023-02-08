@@ -104,10 +104,10 @@ public class BoardUnitTest {
     @Test
     public void shouldCheckIfIsColumnFull() {
         board.insertIntoColumn(0);
-        assertFalse(board.isColumnFull(0));
+        assertTrue(board.canInsertInColumn(0));
 
         board.insertIntoColumn(0);
-        assertTrue(board.isColumnFull(0));
+        assertFalse(board.canInsertInColumn(0));
     }
 
     @Test
