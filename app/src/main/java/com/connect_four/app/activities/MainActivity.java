@@ -20,15 +20,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LinearLayout gameLayout = findViewById(R.id.gameLayout);
-        Button newGameButton = findViewById(R.id.newGameButton);
         Button settingsButton = findViewById(R.id.settingsButton);
 
         Settings settings = new Settings(getApplicationContext());
-
         GameController controller = new GameController(new GameModel(settings), gameLayout);
         controller.restart();
 
-        newGameButton.setOnClickListener(view -> controller.restart());
         settingsButton.setOnClickListener(view -> openSettings());
     }
 

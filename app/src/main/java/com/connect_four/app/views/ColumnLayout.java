@@ -6,8 +6,8 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import com.connect_four.app.model.Disk;
 import com.connect_four.app.R;
+import com.connect_four.app.model.Disk;
 
 import static com.connect_four.app.model.Disk.EMPTY;
 
@@ -76,7 +76,7 @@ public class ColumnLayout extends LinearLayout {
 
     private void createAndAddDisks(Context context) {
         for (int i = 0; i < disks.length; i++) {
-            int size = 140; // TODO: size should dynamically fit the screen
+            int size = 140; // TODO size should dynamically fit the screen
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
             disks[i] = new ImageView(context);
             disks[i].setLayoutParams(layoutParams);
