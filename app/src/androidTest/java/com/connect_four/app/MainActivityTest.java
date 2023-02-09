@@ -7,8 +7,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.connect_four.app.activities.MainActivity;
+import com.connect_four.app.model.Board;
 import com.connect_four.app.views.ColumnLayout;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +32,12 @@ public class MainActivityTest {
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    @Before
+    public void setUp() {
+        Settings settings = new Settings(activityTestRule.getActivity());
+        settings.setSinglePlayerKey(false);
+    }
+
     @Test
     public void shouldDisplayActivityContent() {
         onView(allOf(withText(R.string.player_1_turn), instanceOf(TextView.class))).check(matches(isDisplayed()));
@@ -40,7 +48,6 @@ public class MainActivityTest {
         for (int index = 0; index < Board.WIDTH_DEFAULT; index++) {
             onView(allOf(withTagValue(equalTo(index)), instanceOf(ColumnLayout.class))).check(matches(isDisplayed()));
         }
-
     }
 
     @Test

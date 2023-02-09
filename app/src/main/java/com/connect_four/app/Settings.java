@@ -1,6 +1,7 @@
 package com.connect_four.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
@@ -20,5 +21,12 @@ public class Settings {
 
     public int getDifficulty() {
         return PreferenceManager.getDefaultSharedPreferences(context).getInt(DIFFICULTY_KEY, 5);
+    }
+
+    public void setSinglePlayerKey(boolean value) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SINGLE_PLAYER_KEY, value);
+        editor.apply();
     }
 }
