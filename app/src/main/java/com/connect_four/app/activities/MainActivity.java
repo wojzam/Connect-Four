@@ -7,13 +7,12 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.connect_four.app.Game;
 import com.connect_four.app.R;
 import com.connect_four.app.Settings;
+import com.connect_four.app.controller.GameController;
+import com.connect_four.app.model.GameModel;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +23,13 @@ public class MainActivity extends AppCompatActivity {
         Button newGameButton = findViewById(R.id.newGameButton);
         Button settingsButton = findViewById(R.id.settingsButton);
 
-        newGameButton.setOnClickListener(view -> game.restart());
-        settingsButton.setOnClickListener(view -> openSettings());
-
         Settings settings = new Settings(getApplicationContext());
-        game = new Game(gameLayout, settings);
-        game.restart();
+
+        GameController controller = new GameController(new GameModel(settings), gameLayout);
+        controller.restart();
+
+        newGameButton.setOnClickListener(view -> controller.restart());
+        settingsButton.setOnClickListener(view -> openSettings());
     }
 
     private void openSettings() {

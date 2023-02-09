@@ -1,13 +1,16 @@
 package com.connect_four.app;
 
+import com.connect_four.app.model.Board;
+import com.connect_four.app.model.Disk;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.connect_four.app.Disk.EMPTY;
-import static com.connect_four.app.Disk.PLAYER_1;
-import static com.connect_four.app.Disk.PLAYER_2;
+import static com.connect_four.app.model.Disk.EMPTY;
+import static com.connect_four.app.model.Disk.PLAYER_1;
+import static com.connect_four.app.model.Disk.PLAYER_2;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -118,7 +121,7 @@ public class BoardUnitTest {
         board.insertIntoColumn(0);
         board.insertIntoColumn(1);
         board.insertIntoColumn(1);
-        board.resetBoard();
+        board.reset();
 
         assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
     }

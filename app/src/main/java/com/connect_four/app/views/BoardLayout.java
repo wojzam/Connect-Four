@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 
-import com.connect_four.app.Board;
+import com.connect_four.app.model.Board;
 
 import java.util.ArrayList;
 

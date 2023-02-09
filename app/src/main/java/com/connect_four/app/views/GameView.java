@@ -4,22 +4,24 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
-import com.connect_four.app.Board;
-import com.connect_four.app.Disk;
 import com.connect_four.app.R;
+import com.connect_four.app.controller.GameController;
+import com.connect_four.app.model.Board;
+import com.connect_four.app.model.Disk;
+import com.connect_four.app.model.GameModelInterface;
 
-import static com.connect_four.app.Disk.PLAYER_1;
+import static com.connect_four.app.model.Disk.PLAYER_1;
 
-public class GameViews {
+public class GameView implements GameObserver {
 
     private final Board board;
+    private final GameController controller;
     private final BoardLayout boardLayout;
     private final TextView text;
     private final AppCompatButton undoButton;
@@ -27,8 +29,9 @@ public class GameViews {
     private final int colorPlayer2;
     private final int colorNeutral;
 
-    public GameViews(LinearLayout mainLayout, Board board) {
-        this.board = board;
+    public GameView(GameModelInterface model, GameController controller, LinearLayout mainLayout) {
+        this.board = model.getBoard();
+        this.controller = controller;
         this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
         this.text = new TextView(mainLayout.getContext());
         this.undoButton = new AppCompatButton(mainLayout.getContext());
@@ -36,21 +39,40 @@ public class GameViews {
         this.colorPlayer2 = ContextCompat.getColor(mainLayout.getContext(), R.color.player2);
         this.colorNeutral = ContextCompat.getColor(mainLayout.getContext(), R.color.white);
         arrangeViews(mainLayout);
+
+        model.addGameObserver(this);
+
+        undoButton.setOnClickListener(view -> controller.undoButtonClicked());
     }
 
     private static int dpToPixel(float dp, Context context) {
         return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    public BoardLayout getBoardLayout() {
-        return boardLayout;
+    @Override
+    public void updateBoard() {
+        boardLayout.refresh();
     }
 
-    public Button getUndoButton() {
-        return undoButton;
+    @Override
+    public void updateColumn(int index) {
+        boardLayout.refreshColumn(index);
     }
 
-    public void updateTextToDescribeBoardStatus() {
+    @Override
+    public void enableTurn() {
+        boardLayout.columnsSetOnClickListener(view -> controller.columnClickAction((ColumnLayout) view));
+        undoButton.setEnabled(true);
+    }
+
+    @Override
+    public void disableTurn() {
+        boardLayout.columnsRemoveOnClickListener();
+        undoButton.setEnabled(false);
+    }
+
+    @Override
+    public void updateGameStatus() {
         final Disk currentPlayerID = board.getCurrentPlayerDisk();
         if (board.currentPlayerWonGame()) {
             if (currentPlayerID == PLAYER_1) {

@@ -1,10 +1,10 @@
-package com.connect_four.app;
+package com.connect_four.app.model;
 
 import java.util.Arrays;
 
-import static com.connect_four.app.Disk.EMPTY;
-import static com.connect_four.app.Disk.PLAYER_1;
-import static com.connect_four.app.Disk.PLAYER_2;
+import static com.connect_four.app.model.Disk.EMPTY;
+import static com.connect_four.app.model.Disk.PLAYER_1;
+import static com.connect_four.app.model.Disk.PLAYER_2;
 
 public class Board {
 
@@ -23,7 +23,7 @@ public class Board {
         this.width = width;
         this.height = height;
         this.values = new Disk[width][height];
-        resetBoard();
+        reset();
     }
 
     public Board(Board copy) {
@@ -33,7 +33,7 @@ public class Board {
         this.currentPlayerDisk = copy.getCurrentPlayerDisk();
     }
 
-    public void resetBoard() {
+    public void reset() {
         currentPlayerDisk = PLAYER_1;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

@@ -1,47 +1,50 @@
-package com.connect_four.app;
+package com.connect_four.app.model;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.LinearLayout;
 
+import com.connect_four.app.Settings;
 import com.connect_four.app.ai.AI;
 import com.connect_four.app.commands.Command;
 import com.connect_four.app.commands.CommandHistory;
 import com.connect_four.app.commands.PlayTurn;
-import com.connect_four.app.views.ColumnLayout;
-import com.connect_four.app.views.GameViews;
+import com.connect_four.app.views.GameObserver;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Game {
+public class GameModel implements GameModelInterface {
 
     private final Settings settings;
     private final Board board;
-    private final GameViews gameViews;
     private final CommandHistory commands;
+    private final List<GameObserver> gameObservers = new ArrayList<>();
     private ExecutorService aiTurnExecutor;
 
-    public Game(LinearLayout mainLayout, Settings settings) {
+    public GameModel(Settings settings) {
         this.settings = settings;
         this.board = new Board();
-        this.gameViews = new GameViews(mainLayout, board);
         this.commands = new CommandHistory();
         this.aiTurnExecutor = Executors.newSingleThreadExecutor();
-
-        gameViews.getUndoButton().setOnClickListener(view -> undoTurn());
-        gameViews.updateTextToDescribeBoardStatus();
     }
 
-    public void restart() {
-        board.resetBoard();
-        commands.clear();
-        gameViews.getBoardLayout().refresh();
-        gameViews.getBoardLayout().columnsSetOnClickListener(view -> columnClickAction((ColumnLayout) view));
-        gameViews.getUndoButton().setEnabled(true);
+    @Override
+    public void addGameObserver(GameObserver observer) {
+        gameObservers.add(observer);
+    }
 
+    @Override
+    public Board getBoard() {
+        return board;
+    }
+
+    @Override
+    public void restart() {
+        board.reset();
+        commands.clear();
         resetExecutor();
-        gameViews.updateTextToDescribeBoardStatus();
     }
 
     private void resetExecutor() {
@@ -52,24 +55,24 @@ public class Game {
     }
 
     private void playTurn(int chosenColumn) {
-        Command playTurn = new PlayTurn(board, gameViews, chosenColumn);
+        Command playTurn = new PlayTurn(board, chosenColumn);
         playTurn.execute();
         commands.push(playTurn);
+        gameObservers.forEach(gameObserver -> gameObserver.updateColumn(chosenColumn));
     }
 
-    private void undoTurn() {
+    @Override
+    public void undoTurn() {
         commands.undoLastCommand();
         if (isAIOpponentEnabled()) {
             commands.undoLastCommand();
         }
-        gameViews.updateTextToDescribeBoardStatus();
     }
 
-    private void columnClickAction(ColumnLayout clickedColumn) {
-        int column = clickedColumn.getIndex();
-
-        if (board.canInsertInColumn(column)) {
-            playTurn(column);
+    @Override
+    public void columnClickAction(int columnIndex) {
+        if (board.canInsertInColumn(columnIndex)) {
+            playTurn(columnIndex);
             finalizeTurn();
         }
     }
@@ -82,26 +85,20 @@ public class Game {
         return board.getCurrentPlayerDisk() == AI.AI_DISK;
     }
 
-    private void endGame() {
-        gameViews.getBoardLayout().columnsRemoveOnClickListener();
-        gameViews.getUndoButton().setEnabled(false);
-    }
-
     private void finalizeTurn() {
         if (board.currentPlayerWonGame() || board.isFull()) {
-            endGame();
+            gameObservers.forEach(GameObserver::disableTurn);
         } else {
             board.changePlayer();
             if (isAIOpponentEnabled() && isAIOpponentTurn()) {
                 aiTurn();
             }
         }
-        gameViews.updateTextToDescribeBoardStatus();
+        gameObservers.forEach(GameObserver::updateGameStatus);
     }
 
     private void aiTurn() {
-        gameViews.getBoardLayout().columnsRemoveOnClickListener();
-        gameViews.getUndoButton().setEnabled(false);
+        gameObservers.forEach(GameObserver::disableTurn);
         final Handler aiTurnHandler = new Handler(Looper.getMainLooper());
 
         aiTurnExecutor.execute(() -> {
@@ -111,8 +108,7 @@ public class Game {
             }
             aiTurnHandler.post(() -> {
                 playTurn(aiColumn);
-                gameViews.getBoardLayout().columnsSetOnClickListener(view -> columnClickAction((ColumnLayout) view));
-                gameViews.getUndoButton().setEnabled(true);
+                gameObservers.forEach(GameObserver::enableTurn);
                 finalizeTurn();
             });
         });

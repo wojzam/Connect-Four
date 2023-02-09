@@ -6,10 +6,10 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import com.connect_four.app.Disk;
+import com.connect_four.app.model.Disk;
 import com.connect_four.app.R;
 
-import static com.connect_four.app.Disk.EMPTY;
+import static com.connect_four.app.model.Disk.EMPTY;
 
 public class ColumnLayout extends LinearLayout {
 

@@ -1,13 +1,13 @@
 package com.connect_four.app.ai;
 
-import com.connect_four.app.Board;
-import com.connect_four.app.Disk;
+import com.connect_four.app.model.Board;
+import com.connect_four.app.model.Disk;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.connect_four.app.Disk.PLAYER_1;
-import static com.connect_four.app.Disk.PLAYER_2;
+import static com.connect_four.app.model.Disk.PLAYER_1;
+import static com.connect_four.app.model.Disk.PLAYER_2;
 
 public class AI {
 

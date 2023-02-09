@@ -1,6 +1,7 @@
 package com.connect_four.app;
 
 import com.connect_four.app.ai.AI;
+import com.connect_four.app.model.Board;
 
 import org.junit.Before;
 import org.junit.Test;

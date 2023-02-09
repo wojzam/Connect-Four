@@ -1,9 +1,9 @@
 package com.connect_four.app.ai;
 
-import com.connect_four.app.Board;
-import com.connect_four.app.Disk;
+import com.connect_four.app.model.Board;
+import com.connect_four.app.model.Disk;
 
-import static com.connect_four.app.Disk.EMPTY;
+import static com.connect_four.app.model.Disk.EMPTY;
 
 public class BoardEvaluator {
 
