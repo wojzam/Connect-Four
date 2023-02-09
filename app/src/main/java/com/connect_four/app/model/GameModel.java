@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.connect_four.app.model.Disk.PLAYER_1;
+import static com.connect_four.app.model.Disk.PLAYER_2;
+
 public class GameModel implements GameModelInterface {
 
     private final Settings settings;
     private final Board board;
     private final CommandHistory commands;
     private final List<GameObserver> gameObservers = new ArrayList<>();
+    private final AI ai;
     private ExecutorService aiTurnExecutor;
 
     public GameModel(Settings settings) {
@@ -28,6 +32,7 @@ public class GameModel implements GameModelInterface {
         this.board = new Board();
         this.commands = new CommandHistory();
         this.aiTurnExecutor = Executors.newSingleThreadExecutor();
+        this.ai = new AI(PLAYER_2, PLAYER_1);
     }
 
     @Override
@@ -82,7 +87,7 @@ public class GameModel implements GameModelInterface {
     }
 
     private boolean isAIOpponentTurn() {
-        return board.getCurrentPlayerDisk() == AI.AI_DISK;
+        return board.getCurrentPlayerDisk() == ai.getAiDisk();
     }
 
     private void finalizeTurn() {
@@ -102,7 +107,7 @@ public class GameModel implements GameModelInterface {
         final Handler aiTurnHandler = new Handler(Looper.getMainLooper());
 
         aiTurnExecutor.execute(() -> {
-            final int aiColumn = AI.chooseColumn(board, settings.getDifficulty());
+            final int aiColumn = ai.chooseColumn(board, settings.getDifficulty());
             if (Thread.interrupted()) {
                 return;
             }

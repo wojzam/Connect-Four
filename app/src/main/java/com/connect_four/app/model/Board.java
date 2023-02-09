@@ -157,6 +157,18 @@ public class Board {
         return currentPlayerDisk;
     }
 
+    @Override
+    public int hashCode() {
+        Disk[] flatArray = new Disk[width * height];
+        int index = 0;
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                flatArray[index++] = values[i][j];
+            }
+        }
+        return Arrays.hashCode(flatArray);
+    }
+
     private int findFirstEmptyIndex(int column) {
         for (int i = 0; i < height; i++) {
             if (values[column][i] == EMPTY) {
