@@ -23,7 +23,7 @@ public class AIUnitTest {
     public void setUp() {
         board = new Board();
         board.changePlayer();
-        ai = new AI(AI_DISK, HUMAN_DISK);
+        ai = new AI(AI_DISK);
     }
 
     @Test
