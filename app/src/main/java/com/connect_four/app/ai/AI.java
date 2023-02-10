@@ -14,7 +14,7 @@ public class AI {
     private static final int TIE_MOVE_SCORE = 0;
     private final Disk aiDisk;
     private final Disk humanDisk;
-    private final HashMap<HashAndDepth, MinMaxResult> transpositionTable;
+    private final HashMap<Integer, MinMaxResult> transpositionTable;
 
     public AI(Disk aiDisk, Disk humanDisk) {
         this.aiDisk = aiDisk;
@@ -49,13 +49,13 @@ public class AI {
     }
 
     private MinMaxResult lookupOrExecuteMinMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        HashAndDepth hashAndDepth = new HashAndDepth(board.hashCode(), depth);
-        if (transpositionTable.containsKey(hashAndDepth)) {
-            return transpositionTable.get(hashAndDepth);
+        int boardHash = board.hashCode();
+        if (transpositionTable.containsKey(boardHash)) {
+            return transpositionTable.get(boardHash);
         }
         MinMaxResult result = minMax(board, depth, alpha, beta, maximizingPlayer);
-        transpositionTable.put(hashAndDepth, result);
-        transpositionTable.put(new HashAndDepth(board.hashCodeFlippedHorizontally(), depth), result);
+        transpositionTable.put(boardHash, result);
+        transpositionTable.put(board.hashCodeFlippedHorizontally(), result);
 
         return result;
     }
