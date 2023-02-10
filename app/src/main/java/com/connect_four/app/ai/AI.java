@@ -5,6 +5,7 @@ import com.connect_four.app.model.Disk;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class AI {
 
@@ -13,12 +14,12 @@ public class AI {
     private static final int TIE_MOVE_SCORE = 0;
     private final Disk aiDisk;
     private final Disk humanDisk;
-    private final TranspositionTable table;
+    private final HashMap<HashAndDepth, MinMaxResult> transpositionTable;
 
     public AI(Disk aiDisk, Disk humanDisk) {
         this.aiDisk = aiDisk;
         this.humanDisk = humanDisk;
-        table = new TranspositionTable();
+        transpositionTable = new HashMap<>();
     }
 
     private static ArrayList<Integer> getPossibleMoves(Board board) {
@@ -43,34 +44,33 @@ public class AI {
         Board boardCopy = new Board(board);
         boardCopy.changePlayer();
 
-        return minMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
+        transpositionTable.clear();
+        return lookupOrExecuteMinMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
+    }
+
+    private MinMaxResult lookupOrExecuteMinMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+        HashAndDepth hashAndDepth = new HashAndDepth(board.hashCode(), depth);
+        if (transpositionTable.containsKey(hashAndDepth)) {
+            return transpositionTable.get(hashAndDepth);
+        }
+        MinMaxResult result = minMax(board, depth, alpha, beta, maximizingPlayer);
+        transpositionTable.put(hashAndDepth, result);
+        transpositionTable.put(new HashAndDepth(board.hashCodeFlippedHorizontally(), depth), result);
+
+        return result;
     }
 
     private MinMaxResult minMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        int boardHash = board.hashCode();
-        if (table.containsKey(boardHash)) {
-            TableEntry entry = table.get(boardHash);
-            if (entry.hasGameEnd() || depth == 0) {
-                int score = maximizingPlayer ? entry.getScore() - depth : entry.getScore() + depth;
-                return new MinMaxResult(-1, score);
-            }
-        } else {
-            if (board.currentPlayerWonGame()) {
-                int score = maximizingPlayer ? LOSING_MOVE_SCORE : WINING_MOVE_SCORE;
-                table.put(boardHash, new TableEntry(score, true));
-
-                score = maximizingPlayer ? score - depth : score + depth;
-                return new MinMaxResult(-1, score);
-            }
-            if (board.isFull()) {
-                table.put(boardHash, new TableEntry(TIE_MOVE_SCORE, true));
-                return new MinMaxResult(-1, TIE_MOVE_SCORE);
-            }
-            if (depth == 0) {
-                int score = BoardEvaluator.evaluate(board, aiDisk);
-                table.put(boardHash, new TableEntry(score, false));
-                return new MinMaxResult(-1, score);
-            }
+        if (board.currentPlayerWonGame()) {
+            int score = maximizingPlayer ? LOSING_MOVE_SCORE - depth : WINING_MOVE_SCORE + depth;
+            return new MinMaxResult(-1, score);
+        }
+        if (board.isFull()) {
+            return new MinMaxResult(-1, TIE_MOVE_SCORE);
+        }
+        if (depth == 0) {
+            int score = BoardEvaluator.evaluate(board, aiDisk);
+            return new MinMaxResult(-1, score);
         }
 
         ArrayList<Integer> possibleMoves = getPossibleMoves(board);
@@ -83,7 +83,7 @@ public class AI {
             for (int col : possibleMoves) {
                 Board boardCopy = new Board(board);
                 boardCopy.insertIntoColumn(col, aiDisk);
-                int new_score = minMax(boardCopy, depth - 1, alpha, beta, false).getScore();
+                int new_score = lookupOrExecuteMinMax(boardCopy, depth - 1, alpha, beta, false).getScore();
                 if (new_score > score) {
                     score = new_score;
                     column = col;
@@ -100,7 +100,7 @@ public class AI {
             for (int col : possibleMoves) {
                 Board boardCopy = new Board(board);
                 boardCopy.insertIntoColumn(col, humanDisk);
-                int new_score = minMax(boardCopy, depth - 1, alpha, beta, true).getScore();
+                int new_score = lookupOrExecuteMinMax(boardCopy, depth - 1, alpha, beta, true).getScore();
                 if (new_score < score) {
                     score = new_score;
                     column = col;

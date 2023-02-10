@@ -169,6 +169,18 @@ public class Board {
         return Arrays.hashCode(flatArray);
     }
 
+    public int hashCodeFlippedHorizontally() {
+        Disk[] flipped = new Disk[width*height];
+        int index = 0;
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                flipped[index++] = values[width - i - 1][j];
+            }
+        }
+
+        return Arrays.hashCode(flipped);
+    }
+
     private int findFirstEmptyIndex(int column) {
         for (int i = 0; i < height; i++) {
             if (values[column][i] == EMPTY) {
