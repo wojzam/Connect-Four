@@ -1,6 +1,7 @@
 package com.connect_four.app.views;
 
 import android.content.Context;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -49,7 +50,10 @@ public class ColumnLayout extends LinearLayout {
             disks[index].animate().scaleX(1).scaleY(1).setDuration(400).start();
         } else {
             disks[index].setTranslationY(diskHeight * (index - values.length));
-            disks[index].animate().translationY(0).setDuration(100L * (values.length - index)).start();
+            disks[index].animate().translationY(0)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .setDuration(100L * (values.length - index))
+                    .start();
         }
     }
 
