@@ -15,14 +15,12 @@ public class GameController {
         this.model = model;
         this.view = new GameView(model, this, layout);
         view.updateGameStatus();
-        view.enableTurn();
     }
 
     public void restart() {
         model.restart();
         view.updateBoard();
         view.updateGameStatus();
-        view.enableTurn();
     }
 
     public void columnClickAction(ColumnLayout clickedColumn) {

@@ -8,8 +8,7 @@ public interface GameObserver {
 
     void updateGameStatus();
 
-    void enableTurn();
+    void setUndoEnabled(boolean enabled);
 
-    void disableTurn();
-
+    void setEnabled(boolean enabled);
 }

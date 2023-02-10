@@ -21,18 +21,17 @@ import static com.connect_four.app.model.Disk.PLAYER_2;
 public class GameModel implements GameModelInterface {
 
     private final Settings settings;
-    private final Board board;
-    private final CommandHistory commands;
+    private final Board board = new Board();
+    private final CommandHistory commands = new CommandHistory();
     private final List<GameObserver> gameObservers = new ArrayList<>();
     private final AI ai;
     private ExecutorService aiTurnExecutor;
 
+
     public GameModel(Settings settings) {
         this.settings = settings;
-        this.board = new Board();
-        this.commands = new CommandHistory();
-        this.aiTurnExecutor = Executors.newSingleThreadExecutor();
-        this.ai = new AI(PLAYER_2, PLAYER_1);
+        aiTurnExecutor = Executors.newSingleThreadExecutor();
+        ai = new AI(PLAYER_2, PLAYER_1);
     }
 
     @Override
@@ -50,6 +49,8 @@ public class GameModel implements GameModelInterface {
         board.reset();
         commands.clear();
         resetExecutor();
+        gameObservers.forEach(gameObserver -> gameObserver.setEnabled(true));
+        gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
     }
 
     private void resetExecutor() {
@@ -64,6 +65,7 @@ public class GameModel implements GameModelInterface {
         playTurn.execute();
         commands.push(playTurn);
         gameObservers.forEach(gameObserver -> gameObserver.updateColumn(chosenColumn));
+        gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
     }
 
     @Override
@@ -72,6 +74,11 @@ public class GameModel implements GameModelInterface {
         if (isAIOpponentEnabled()) {
             commands.undoLastCommand();
         }
+        gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
+    }
+
+    private boolean canUndo() {
+        return commands.size() > 0;
     }
 
     @Override
@@ -92,7 +99,7 @@ public class GameModel implements GameModelInterface {
 
     private void finalizeTurn() {
         if (board.currentPlayerWonGame() || board.isFull()) {
-            gameObservers.forEach(GameObserver::disableTurn);
+            gameObservers.forEach(gameObserver -> gameObserver.setEnabled(false));
         } else {
             board.changePlayer();
             if (isAIOpponentEnabled() && isAIOpponentTurn()) {
@@ -103,7 +110,7 @@ public class GameModel implements GameModelInterface {
     }
 
     private void aiTurn() {
-        gameObservers.forEach(GameObserver::disableTurn);
+        gameObservers.forEach(gameObserver -> gameObserver.setEnabled(false));
         final Handler aiTurnHandler = new Handler(Looper.getMainLooper());
 
         aiTurnExecutor.execute(() -> {
@@ -113,7 +120,7 @@ public class GameModel implements GameModelInterface {
             }
             aiTurnHandler.post(() -> {
                 playTurn(aiColumn);
-                gameObservers.forEach(GameObserver::enableTurn);
+                gameObservers.forEach(gameObserver -> gameObserver.setEnabled(true));
                 finalizeTurn();
             });
         });

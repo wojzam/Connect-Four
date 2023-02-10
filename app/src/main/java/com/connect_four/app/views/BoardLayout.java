@@ -21,6 +21,12 @@ public class BoardLayout extends LinearLayout {
         createAndAddColumns(context);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        columns.forEach(columnLayout -> columnLayout.setEnabled(enabled));
+    }
+
     public void refreshColumn(int column) {
         columns.get(column).refresh(board.getColumnValues(column));
     }
@@ -32,15 +38,7 @@ public class BoardLayout extends LinearLayout {
     }
 
     public void columnsSetOnClickListener(OnClickListener onClickListener) {
-        for (ColumnLayout columnLayout : columns) {
-            columnLayout.setOnClickListener(onClickListener);
-        }
-    }
-
-    public void columnsRemoveOnClickListener() {
-        for (ColumnLayout columnLayout : columns) {
-            columnLayout.setOnClickListener(null);
-        }
+        columns.forEach(columnLayout -> columnLayout.setOnClickListener(onClickListener));
     }
 
     private void createAndAddColumns(Context context) {

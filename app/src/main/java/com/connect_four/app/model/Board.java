@@ -170,7 +170,7 @@ public class Board {
     }
 
     public int hashCodeFlippedHorizontally() {
-        Disk[] flipped = new Disk[width*height];
+        Disk[] flipped = new Disk[width * height];
         int index = 0;
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {

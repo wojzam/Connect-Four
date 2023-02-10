@@ -15,7 +15,6 @@ import com.connect_four.app.model.GameModelInterface;
 public class GameView implements GameObserver {
 
     private final Board board;
-    private final GameController controller;
     private final BoardLayout boardLayout;
     private final GameStateTextView gameStateText;
     private final AppCompatButton newGameButton;
@@ -23,7 +22,6 @@ public class GameView implements GameObserver {
 
     public GameView(GameModelInterface model, GameController controller, LinearLayout mainLayout) {
         this.board = model.getBoard();
-        this.controller = controller;
         this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
         this.gameStateText = new GameStateTextView(mainLayout.getContext());
         this.newGameButton = new AppCompatButton(mainLayout.getContext());
@@ -33,6 +31,7 @@ public class GameView implements GameObserver {
 
         model.addGameObserver(this);
 
+        boardLayout.columnsSetOnClickListener(view -> controller.columnClickAction((ColumnLayout) view));
         newGameButton.setOnClickListener(view -> controller.restart());
         undoButton.setOnClickListener(view -> controller.undoButtonClicked());
     }
@@ -52,20 +51,24 @@ public class GameView implements GameObserver {
     }
 
     @Override
-    public void enableTurn() {
-        boardLayout.columnsSetOnClickListener(view -> controller.columnClickAction((ColumnLayout) view));
-        undoButton.setEnabled(true);
-    }
-
-    @Override
-    public void disableTurn() {
-        boardLayout.columnsRemoveOnClickListener();
-        undoButton.setEnabled(false);
+    public void setEnabled(boolean enabled) {
+        boardLayout.setEnabled(enabled);
+        setUndoEnabled(enabled);
     }
 
     @Override
     public void updateGameStatus() {
         gameStateText.update(board);
+    }
+
+    @Override
+    public void setUndoEnabled(boolean enabled) {
+        undoButton.setEnabled(enabled);
+        if (enabled) {
+            undoButton.setBackgroundResource(R.drawable.button_bg);
+        } else {
+            undoButton.setBackgroundResource(R.drawable.button_disabled_bg);
+        }
     }
 
     private void arrangeViews(LinearLayout mainLayout) {
