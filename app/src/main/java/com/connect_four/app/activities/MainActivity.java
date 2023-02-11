@@ -14,6 +14,9 @@ import com.connect_four.app.model.GameModel;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Settings settings;
+    private GameController controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +25,20 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout gameLayout = findViewById(R.id.gameLayout);
         Button settingsButton = findViewById(R.id.settingsButton);
 
-        Settings settings = new Settings(getApplicationContext());
-        GameController controller = new GameController(new GameModel(settings), gameLayout);
+        settings = new Settings(getApplicationContext());
+        controller = new GameController(new GameModel(settings), gameLayout);
         controller.restart();
 
         settingsButton.setOnClickListener(view -> openSettings());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (settings.hasChanged()) {
+            settings.update();
+            controller.restart();
+        }
     }
 
     private void openSettings() {

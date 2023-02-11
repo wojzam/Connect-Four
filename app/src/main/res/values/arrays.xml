@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="first_turn_options">
+        <item>@string/pref_turn_human</item>
+        <item>@string/pref_turn_ai</item>
+    </string-array>
+    <string-array name="first_turn_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>

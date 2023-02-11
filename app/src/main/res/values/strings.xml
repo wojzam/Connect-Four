@@ -17,5 +17,10 @@
 
     <!-- Settings -->
     <string name="single_player_title">Single-player</string>
+    <string name="ai_settings_title">AI Settings</string>
     <string name="difficulty_title">Difficulty</string>
+    <string name="first_turn_title">First Turn</string>
+    <string name="pref_turn_human">Player</string>
+    <string name="pref_turn_ai">AI</string>
+
 </resources>

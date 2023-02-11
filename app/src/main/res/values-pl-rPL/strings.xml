@@ -6,10 +6,14 @@
     <string name="player_2_won">Żółty wygrał</string>
     <string name="player_2_turn">Tura żółtego</string>
     <string name="tie_info">Remis</string>
-    <string name="difficulty_title">Poziom trudności</string>
-    <string name="single_player_title">Gra jednoosobowa</string>
     <string name="new_game">NOWA GRA</string>
     <string name="settings">USTAWIENIA</string>
     <string name="undo">COFNIJ</string>
     <string name="title_activity_settings">Ustawienia</string>
+    <string name="ai_settings_title">Ustawienia AI</string>
+    <string name="difficulty_title">Poziom trudności</string>
+    <string name="single_player_title">Gra jednoosobowa</string>
+    <string name="first_turn_title">Pierwsza tura</string>
+    <string name="pref_turn_human">Gracz</string>
+    <string name="pref_turn_ai">AI</string>
 </resources>

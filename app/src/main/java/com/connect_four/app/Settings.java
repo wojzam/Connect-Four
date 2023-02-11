@@ -5,28 +5,50 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import java.util.Objects;
+
 public class Settings {
 
     private static final String SINGLE_PLAYER_KEY = "single_player";
     private static final String DIFFICULTY_KEY = "difficulty";
-    private final Context context;
+    private static final String FIRST_TURN_KEY = "first_turn";
+    private final SharedPreferences sharedPreferences;
+    private boolean singlePlayer;
+    private int difficulty;
+    private String firstTurn;
 
     public Settings(Context context) {
-        this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        update();
     }
 
-    public boolean getSinglePlayer() {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SINGLE_PLAYER_KEY, true);
+    public void update() {
+        singlePlayer = sharedPreferences.getBoolean(SINGLE_PLAYER_KEY, true);
+        difficulty = sharedPreferences.getInt(DIFFICULTY_KEY, 6);
+        firstTurn = sharedPreferences.getString(FIRST_TURN_KEY, "0");
     }
 
-    public int getDifficulty() {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(DIFFICULTY_KEY, 5);
+    public boolean hasChanged() {
+        return singlePlayer != sharedPreferences.getBoolean(SINGLE_PLAYER_KEY, true) ||
+                difficulty != sharedPreferences.getInt(DIFFICULTY_KEY, 6) ||
+                !Objects.equals(firstTurn, sharedPreferences.getString(FIRST_TURN_KEY, "0"));
     }
 
-    public void setSinglePlayerKey(boolean value) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    public boolean isSinglePlayer() {
+        return singlePlayer;
+    }
+
+    public void setSinglePlayer(boolean value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SINGLE_PLAYER_KEY, value);
         editor.apply();
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public String getFirstTurn() {
+        return firstTurn;
     }
 }

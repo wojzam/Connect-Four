@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.connect_four.app.model.Disk.PLAYER_1;
 import static com.connect_four.app.model.Disk.PLAYER_2;
 
 public class GameModel implements GameModelInterface {
@@ -27,11 +26,10 @@ public class GameModel implements GameModelInterface {
     private final AI ai;
     private ExecutorService aiTurnExecutor;
 
-
     public GameModel(Settings settings) {
         this.settings = settings;
         aiTurnExecutor = Executors.newSingleThreadExecutor();
-        ai = new AI(PLAYER_2, PLAYER_1);
+        ai = new AI(PLAYER_2);
     }
 
     @Override
@@ -90,7 +88,7 @@ public class GameModel implements GameModelInterface {
     }
 
     private boolean isAIOpponentEnabled() {
-        return settings.getSinglePlayer();
+        return settings.isSinglePlayer();
     }
 
     private boolean isAIOpponentTurn() {

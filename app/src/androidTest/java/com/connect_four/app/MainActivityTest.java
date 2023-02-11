@@ -35,7 +35,7 @@ public class MainActivityTest {
     @Before
     public void setUp() {
         Settings settings = new Settings(activityTestRule.getActivity());
-        settings.setSinglePlayerKey(false);
+        settings.setSinglePlayer(false);
     }
 
     @Test

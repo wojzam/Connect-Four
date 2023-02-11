@@ -1,20 +1,36 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SeekBarPreference
-        android:max="7"
-        app:defaultValue="5"
-        app:dependency="single_player"
-        app:iconSpaceReserved="false"
-        app:key="difficulty"
-        app:min="1"
-        app:showSeekBarValue="true"
-        app:title="@string/difficulty_title" />
-
     <SwitchPreferenceCompat
         app:defaultValue="true"
         app:iconSpaceReserved="false"
         app:key="single_player"
         app:title="@string/single_player_title" />
+
+    <PreferenceCategory
+        android:title="@string/ai_settings_title"
+        app:allowDividerAbove="false"
+        app:dependency="single_player"
+        app:iconSpaceReserved="false">
+
+        <SeekBarPreference
+            android:max="10"
+            app:defaultValue="6"
+            app:iconSpaceReserved="false"
+            app:key="difficulty"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:title="@string/difficulty_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/first_turn_options"
+            android:entryValues="@array/first_turn_values"
+            android:key="first_turn"
+            android:summary="%s"
+            android:title="@string/first_turn_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
