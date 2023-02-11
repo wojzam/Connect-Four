@@ -15,7 +15,7 @@ public class AIUnitTest {
 
     private static final Disk AI_DISK = PLAYER_2;
     private static final Disk HUMAN_DISK = PLAYER_1;
-    private final static int DEFAULT_DEPTH = 5;
+    private final static int DEFAULT_DEPTH = 4;
     private Board board;
     private AI ai;
 
@@ -23,7 +23,7 @@ public class AIUnitTest {
     public void setUp() {
         board = new Board();
         board.changePlayer();
-        ai = new AI(AI_DISK);
+        ai = new AI();
     }
 
     @Test

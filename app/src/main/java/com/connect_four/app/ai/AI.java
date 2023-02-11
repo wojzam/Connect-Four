@@ -12,13 +12,8 @@ public class AI {
     private static final int WINING_MOVE_SCORE = 1000000000;
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
-    private final Disk aiDisk;
-    private final HashMap<Integer, MinMaxResult> transpositionTable;
-
-    public AI(Disk aiDisk) {
-        this.aiDisk = aiDisk;
-        transpositionTable = new HashMap<>();
-    }
+    private final HashMap<Integer, MinMaxResult> transpositionTable = new HashMap<>();
+    private Disk aiDisk;
 
     private static ArrayList<Integer> getPossibleMoves(Board board) {
         ArrayList<Integer> possibleMoves = new ArrayList<>();
@@ -33,12 +28,9 @@ public class AI {
         return possibleMoves;
     }
 
-    public Disk getAiDisk() {
-        return aiDisk;
-    }
-
     public int chooseColumn(Board board, int depth) {
         assert depth > 0 : "Depth should be greater than zero";
+        aiDisk = board.getCurrentPlayerDisk();
         Board boardCopy = new Board(board);
         boardCopy.changePlayer();
         transpositionTable.clear();
