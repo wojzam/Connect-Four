@@ -59,9 +59,7 @@ public class GameModel implements GameModelInterface {
     }
 
     private void playTurn(int chosenColumn) {
-        Command playTurn = new PlayTurn(board, chosenColumn);
-        playTurn.execute();
-        commands.push(playTurn);
+        commands.executeAndSave(new PlayTurn(board, chosenColumn));
         gameObservers.forEach(gameObserver -> gameObserver.updateColumn(chosenColumn));
         gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
     }
