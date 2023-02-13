@@ -1,7 +1,7 @@
 package com.connect_four.app.views;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.connect_four.app.model.Board;
@@ -16,8 +16,8 @@ public class BoardLayout extends LinearLayout {
     public BoardLayout(Context context, Board board) {
         super(context);
         this.board = board;
+        setId(View.generateViewId());
         setOrientation(HORIZONTAL);
-        setGravity(Gravity.CENTER);
         createAndAddColumns(context);
     }
 

@@ -3,9 +3,9 @@ package com.connect_four.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.connect_four.app.R;
 import com.connect_four.app.Settings;
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LinearLayout gameLayout = findViewById(R.id.gameLayout);
+        ConstraintLayout gameLayout = findViewById(R.id.gameLayout);
         Button settingsButton = findViewById(R.id.settingsButton);
 
         settings = new Settings(getApplicationContext());

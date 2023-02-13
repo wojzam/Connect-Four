@@ -2,8 +2,7 @@ package com.connect_four.app.views;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.view.Gravity;
-import android.widget.LinearLayout;
+import android.view.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
@@ -13,7 +12,6 @@ import com.connect_four.app.model.Board;
 import com.connect_four.app.model.Disk;
 
 import static com.connect_four.app.model.Disk.PLAYER_1;
-import static com.connect_four.app.views.GameView.dpToPixel;
 
 public class GameStateTextView extends AppCompatTextView {
 
@@ -23,14 +21,7 @@ public class GameStateTextView extends AppCompatTextView {
 
     public GameStateTextView(Context context) {
         super(context);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        int margin = dpToPixel(50, context);
-        layoutParams.setMargins(0, margin, 0, margin);
-        layoutParams.gravity = Gravity.CENTER;
-
-        setLayoutParams(layoutParams);
+        setId(View.generateViewId());
         setTypeface(Typeface.SERIF);
         setTextSize(25);
 

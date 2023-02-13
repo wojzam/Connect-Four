@@ -2,10 +2,10 @@ package com.connect_four.app.views;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.connect_four.app.R;
 import com.connect_four.app.controller.GameController;
@@ -17,17 +17,19 @@ public class GameView implements GameObserver {
     private final Board board;
     private final BoardLayout boardLayout;
     private final GameStateTextView gameStateText;
-    private final AppCompatButton newGameButton;
     private final AppCompatButton undoButton;
+    private final AppCompatButton newGameButton;
 
-    public GameView(GameModelInterface model, GameController controller, LinearLayout mainLayout) {
+    public GameView(GameModelInterface model, GameController controller, ConstraintLayout mainLayout) {
         this.board = model.getBoard();
         this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
         this.gameStateText = new GameStateTextView(mainLayout.getContext());
-        this.newGameButton = new AppCompatButton(mainLayout.getContext());
-        this.undoButton = new AppCompatButton(mainLayout.getContext());
+        this.undoButton = new CustomButton(mainLayout.getContext(), R.string.undo);
+        this.newGameButton = new CustomButton(mainLayout.getContext(), R.string.new_game);
 
         arrangeViews(mainLayout);
+        updateBoard();
+        updateGameStatus();
 
         model.addGameObserver(this);
 
@@ -36,7 +38,7 @@ public class GameView implements GameObserver {
         undoButton.setOnClickListener(view -> controller.undoButtonClicked());
     }
 
-    public static int dpToPixel(float dp, Context context) {
+    private static int dpToPixel(float dp, Context context) {
         return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
@@ -71,31 +73,35 @@ public class GameView implements GameObserver {
         }
     }
 
-    private void arrangeViews(LinearLayout mainLayout) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-        int margin = dpToPixel(15, mainLayout.getContext());
-        layoutParams.setMargins(margin, 0, margin, 0);
-
-        newGameButton.setText(R.string.new_game);
-        newGameButton.setBackgroundResource(R.drawable.button_bg);
-        newGameButton.setLayoutParams(layoutParams);
-
-        undoButton.setText(R.string.undo);
-        undoButton.setBackgroundResource(R.drawable.button_bg);
-        undoButton.setLayoutParams(layoutParams);
-
-        LinearLayout buttonsLayout = new LinearLayout(mainLayout.getContext());
-        buttonsLayout.setGravity(Gravity.CENTER);
-        buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        buttonsLayout.addView(undoButton);
-        buttonsLayout.addView(newGameButton);
+    private void arrangeViews(ConstraintLayout mainLayout) {
+        int buttonsMargin = dpToPixel(15, mainLayout.getContext());
 
         mainLayout.addView(boardLayout);
         mainLayout.addView(gameStateText);
-        mainLayout.addView(buttonsLayout);
+        mainLayout.addView(undoButton);
+        mainLayout.addView(newGameButton);
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(mainLayout);
+
+        set.connect(boardLayout.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 0);
+        set.connect(boardLayout.getId(), ConstraintSet.BOTTOM, gameStateText.getId(), ConstraintSet.TOP, 0);
+        set.connect(boardLayout.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 0);
+        set.connect(boardLayout.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, 0);
+
+        set.connect(gameStateText.getId(), ConstraintSet.BOTTOM, undoButton.getId(), ConstraintSet.TOP, 0);
+        set.connect(gameStateText.getId(), ConstraintSet.TOP, boardLayout.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(gameStateText.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 0);
+        set.connect(gameStateText.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, 0);
+
+        set.connect(undoButton.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(undoButton.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, buttonsMargin);
+        set.connect(undoButton.getId(), ConstraintSet.RIGHT, newGameButton.getId(), ConstraintSet.LEFT, buttonsMargin);
+
+        set.connect(newGameButton.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(newGameButton.getId(), ConstraintSet.LEFT, undoButton.getId(), ConstraintSet.RIGHT, 0);
+        set.connect(newGameButton.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, buttonsMargin);
+
+        set.applyTo(mainLayout);
     }
 }

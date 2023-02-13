@@ -1,6 +1,6 @@
 package com.connect_four.app.controller;
 
-import android.widget.LinearLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.connect_four.app.model.GameModelInterface;
 import com.connect_four.app.views.ColumnLayout;
@@ -11,7 +11,7 @@ public class GameController {
     private final GameModelInterface model;
     private final GameView view;
 
-    public GameController(GameModelInterface model, LinearLayout layout) {
+    public GameController(GameModelInterface model, ConstraintLayout layout) {
         this.model = model;
         this.view = new GameView(model, this, layout);
         view.updateGameStatus();
