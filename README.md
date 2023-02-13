@@ -21,5 +21,5 @@ Studio and build it using the built-in tools.
 
 ## Screenshots
 
-![screen1](screenshots/screen1.png)
-![screen2](screenshots/screen2.png)
+<img src="screenshots/screen1.png" width="49%">
+<img src="screenshots/screen2.png" width="49%">
