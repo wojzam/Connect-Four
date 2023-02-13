@@ -18,6 +18,11 @@ public class ColumnLayout extends LinearLayout {
     private final int index;
     private Disk[] values;
 
+    public ColumnLayout(Context context) {
+        super(context);
+        throw new UnsupportedOperationException("This constructor is not supported");
+    }
+
     public ColumnLayout(@NonNull Context context, @NonNull Disk[] values, int index) {
         super(context);
         this.disks = new ImageView[values.length];

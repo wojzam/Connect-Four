@@ -13,6 +13,11 @@ public class BoardLayout extends LinearLayout {
     private final Board board;
     private final ArrayList<ColumnLayout> columns = new ArrayList<>();
 
+    public BoardLayout(Context context) {
+        super(context);
+        throw new UnsupportedOperationException("This constructor is not supported");
+    }
+
     public BoardLayout(Context context, Board board) {
         super(context);
         this.board = board;
