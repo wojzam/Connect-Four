@@ -5,7 +5,6 @@ import android.os.Looper;
 
 import com.connect_four.app.Settings;
 import com.connect_four.app.ai.AI;
-import com.connect_four.app.commands.Command;
 import com.connect_four.app.commands.CommandHistory;
 import com.connect_four.app.commands.PlayTurn;
 import com.connect_four.app.views.GameObserver;
@@ -15,21 +14,18 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.connect_four.app.model.Disk.PLAYER_2;
-
 public class GameModel implements GameModelInterface {
 
     private final Settings settings;
     private final Board board = new Board();
     private final CommandHistory commands = new CommandHistory();
     private final List<GameObserver> gameObservers = new ArrayList<>();
-    private final AI ai;
+    private final AI ai = new AI();
     private ExecutorService aiTurnExecutor;
 
     public GameModel(Settings settings) {
         this.settings = settings;
         aiTurnExecutor = Executors.newSingleThreadExecutor();
-        ai = new AI(PLAYER_2);
     }
 
     @Override
@@ -47,7 +43,11 @@ public class GameModel implements GameModelInterface {
         board.reset();
         commands.clear();
         resetExecutor();
-        gameObservers.forEach(gameObserver -> gameObserver.setEnabled(true));
+        if (isAIOpponentTurn()) {
+            aiTurn();
+        } else {
+            gameObservers.forEach(gameObserver -> gameObserver.setEnabled(true));
+        }
         gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
     }
 
@@ -90,7 +90,7 @@ public class GameModel implements GameModelInterface {
     }
 
     private boolean isAIOpponentTurn() {
-        return board.getCurrentPlayerDisk() == ai.getAiDisk();
+        return isAIOpponentEnabled() && board.getCurrentPlayerDisk() == settings.getAIPlayerDisk();
     }
 
     private void finalizeTurn() {
@@ -98,7 +98,7 @@ public class GameModel implements GameModelInterface {
             gameObservers.forEach(gameObserver -> gameObserver.setEnabled(false));
         } else {
             board.changePlayer();
-            if (isAIOpponentEnabled() && isAIOpponentTurn()) {
+            if (isAIOpponentTurn()) {
                 aiTurn();
             }
         }

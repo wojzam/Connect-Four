@@ -14,7 +14,6 @@ public class GameController {
     public GameController(GameModelInterface model, ConstraintLayout layout) {
         this.model = model;
         this.view = new GameView(model, this, layout);
-        view.updateGameStatus();
     }
 
     public void restart() {

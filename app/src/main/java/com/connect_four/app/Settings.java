@@ -5,7 +5,12 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.connect_four.app.model.Disk;
+
 import java.util.Objects;
+
+import static com.connect_four.app.model.Disk.PLAYER_1;
+import static com.connect_four.app.model.Disk.PLAYER_2;
 
 public class Settings {
 
@@ -48,7 +53,11 @@ public class Settings {
         return difficulty;
     }
 
-    public String getFirstTurn() {
-        return firstTurn;
+    public Disk getAIPlayerDisk() {
+        if (Objects.equals(firstTurn, "0")) {
+            return PLAYER_2;
+        }
+        return PLAYER_1;
     }
+
 }
