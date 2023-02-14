@@ -4,7 +4,6 @@ import com.connectfour.app.model.Board;
 import com.connectfour.app.model.Disk;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class AI {
@@ -13,27 +12,20 @@ public class AI {
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
     private final HashMap<Integer, MinMaxResult> transpositionTable = new HashMap<>();
+    private MovesStrategy movesStrategy;
     private Disk aiDisk;
 
-    private static ArrayList<Integer> getPossibleMoves(Board board) {
-        ArrayList<Integer> possibleMoves = new ArrayList<>();
-
-        for (int i = 0; i < board.getWidth(); i++) {
-            if (board.canInsertInColumn(i)) {
-                possibleMoves.add(i);
-            }
-        }
-        Collections.shuffle(possibleMoves);
-
-        return possibleMoves;
+    private ArrayList<Integer> getPossibleMoves(Board board) {
+        return movesStrategy.getPossibleMoves(board);
     }
 
     public int chooseColumn(Board board, int depth) {
         assert depth > 0 : "Depth should be greater than zero";
         aiDisk = board.getCurrentPlayerDisk();
+        movesStrategy = StrategyFactory.getStrategy(depth);
+        transpositionTable.clear();
         Board boardCopy = new Board(board);
         boardCopy.changePlayer();
-        transpositionTable.clear();
 
         return lookupOrExecuteMinMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
     }
@@ -45,7 +37,6 @@ public class AI {
         }
         MinMaxResult result = minMax(board, depth, alpha, beta, maximizingPlayer);
         transpositionTable.put(boardHash, result);
-        transpositionTable.put(board.hashCodeFlippedHorizontally(), result);
 
         return result;
     }
