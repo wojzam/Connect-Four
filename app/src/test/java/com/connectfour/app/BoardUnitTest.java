@@ -11,6 +11,7 @@ import java.util.Arrays;
 import static com.connectfour.app.model.Disk.EMPTY;
 import static com.connectfour.app.model.Disk.PLAYER_1;
 import static com.connectfour.app.model.Disk.PLAYER_2;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -142,11 +143,20 @@ public class BoardUnitTest {
     }
 
     @Test
+    public void shouldCheckIfWonGame_whenBoardIsEmpty() {
+        Board defaultBoard = new Board();
+
+        assertFalse(defaultBoard.currentPlayerWonGame());
+    }
+
+    @Test
     public void shouldCheckIfWonGame_whenSequenceIsHorizontal() {
         Board defaultBoard = new Board();
         defaultBoard.insertIntoColumn(0);
         defaultBoard.insertIntoColumn(1);
         defaultBoard.insertIntoColumn(2);
+        assertFalse(defaultBoard.currentPlayerWonGame());
+
         defaultBoard.insertIntoColumn(3);
 
         assertTrue(defaultBoard.currentPlayerWonGame());
@@ -158,6 +168,8 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(0);
         defaultBoard.insertIntoColumn(0);
         defaultBoard.insertIntoColumn(0);
+        assertFalse(defaultBoard.currentPlayerWonGame());
+
         defaultBoard.insertIntoColumn(0);
 
         assertTrue(defaultBoard.currentPlayerWonGame());
@@ -175,6 +187,8 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(3, PLAYER_2);
         defaultBoard.insertIntoColumn(3, PLAYER_2);
         defaultBoard.insertIntoColumn(3, PLAYER_2);
+        assertFalse(defaultBoard.currentPlayerWonGame());
+
         defaultBoard.insertIntoColumn(3, PLAYER_1);
 
         assertTrue(defaultBoard.currentPlayerWonGame());
@@ -192,8 +206,51 @@ public class BoardUnitTest {
         defaultBoard.insertIntoColumn(0, PLAYER_2);
         defaultBoard.insertIntoColumn(0, PLAYER_2);
         defaultBoard.insertIntoColumn(0, PLAYER_2);
+        assertFalse(defaultBoard.currentPlayerWonGame());
+
         defaultBoard.insertIntoColumn(0, PLAYER_1);
 
         assertTrue(defaultBoard.currentPlayerWonGame());
+    }
+
+    @Test
+    public void shouldGenerateIdenticalHashCode_whenBoardsAreEmpty() {
+        Board board1 = new Board();
+        Board board2 = new Board();
+
+        assertEquals(board1.hashCode(), board2.hashCode());
+    }
+
+    @Test
+    public void shouldGenerateIdenticalHashCode_whenBoardsAreIdentical() {
+        Board board = new Board();
+
+        int[] columns = {0, 0, 1, 2, 1, 1, 2, 0, 6, 0, 6, 4, 2, 3, 2};
+
+        for (int col : columns) {
+            board.insertIntoColumn(col);
+            board.changePlayer();
+        }
+
+        Board boardCopy = new Board(board);
+
+        assertEquals(board.hashCode(), boardCopy.hashCode());
+    }
+
+    @Test
+    public void shouldGenerateDifferentHashCode_whenBoardsAreDifferent() {
+        Board board = new Board();
+
+        int[] columns = {0, 0, 1, 2, 1, 1, 2, 0, 6, 0, 6, 4, 2, 3, 2};
+
+        for (int col : columns) {
+            board.insertIntoColumn(col);
+            board.changePlayer();
+        }
+
+        Board boardCopy = new Board(board);
+        boardCopy.insertIntoColumn(0, PLAYER_1);
+
+        assertNotEquals(board.hashCode(), boardCopy.hashCode());
     }
 }
