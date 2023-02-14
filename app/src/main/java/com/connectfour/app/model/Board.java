@@ -80,33 +80,19 @@ public class Board {
     public boolean currentPlayerWonGame() {
         Disk id = currentPlayerDisk;
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height - 3; j++) {
-                if (values[i][j] == id && values[i][j + 1] == id && values[i][j + 2] == id && values[i][j + 3] == id) {
-                    return true;
-                }
-            }
-        }
-
-        for (int i = 0; i < width - 3; i++) {
             for (int j = 0; j < height; j++) {
-                if (values[i][j] == id && values[i + 1][j] == id && values[i + 2][j] == id && values[i + 3][j] == id) {
-                    return true;
+                if (values[i][j] != id) continue;
+                if (i < width - 3 && values[i + 1][j] == id && values[i + 2][j] == id && values[i + 3][j] == id) {
+                    return true; // horizontal
                 }
-            }
-        }
-
-        for (int i = 0; i < width - 3; i++) {
-            for (int j = 0; j < height - 3; j++) {
-                if (values[i][j] == id && values[i + 1][j + 1] == id && values[i + 2][j + 2] == id && values[i + 3][j + 3] == id) {
-                    return true;
+                if (j < height - 3 && values[i][j + 1] == id && values[i][j + 2] == id && values[i][j + 3] == id) {
+                    return true; // vertical
                 }
-            }
-        }
-
-        for (int i = 3; i < width; i++) {
-            for (int j = 0; j < height - 3; j++) {
-                if (values[i][j] == id && values[i - 1][j + 1] == id && values[i - 2][j + 2] == id && values[i - 3][j + 3] == id) {
-                    return true;
+                if (i < width - 3 && j < height - 3 && values[i + 1][j + 1] == id && values[i + 2][j + 2] == id && values[i + 3][j + 3] == id) {
+                    return true; // diagonal (positive slope)
+                }
+                if (i >= 3 && j < height - 3 && values[i - 1][j + 1] == id && values[i - 2][j + 2] == id && values[i - 3][j + 3] == id) {
+                    return true; // diagonal (negative slope)
                 }
             }
         }
