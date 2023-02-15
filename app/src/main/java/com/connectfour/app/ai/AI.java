@@ -25,7 +25,7 @@ public class AI {
         aiDisk = board.getCurrentPlayerDisk();
         movesStrategy = StrategyFactory.getStrategy(depth);
         transpositionTable.clear();
-        Board boardCopy = new Board(board);
+        Board boardCopy = new BoardEvaluator(board);
         boardCopy.changePlayer();
 
         return lookupOrExecuteMinMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
@@ -51,7 +51,7 @@ public class AI {
             return new MinMaxResult(-1, TIE_MOVE_SCORE);
         }
         if (depth == 0) {
-            int score = BoardEvaluator.evaluate(board, aiDisk);
+            int score = ((BoardEvaluator) board).evaluate(aiDisk);
             return new MinMaxResult(-1, score);
         }
 

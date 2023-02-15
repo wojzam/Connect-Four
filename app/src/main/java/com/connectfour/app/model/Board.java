@@ -10,10 +10,10 @@ public class Board {
 
     public static final int WIDTH_DEFAULT = 7;
     public static final int HEIGHT_DEFAULT = 6;
-    private final Disk[][] values;
-    private final int width;
-    private final int height;
-    private Disk currentPlayerDisk;
+    protected final Disk[][] values;
+    protected final int width;
+    protected final int height;
+    protected Disk currentPlayerDisk;
 
     public Board() {
         this(WIDTH_DEFAULT, HEIGHT_DEFAULT);
