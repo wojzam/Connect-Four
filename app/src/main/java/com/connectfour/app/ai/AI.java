@@ -1,6 +1,7 @@
 package com.connectfour.app.ai;
 
 import com.connectfour.app.model.Board;
+import com.connectfour.app.model.BoardHash;
 import com.connectfour.app.model.Disk;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class AI {
     private static final int WINING_MOVE_SCORE = 1000000000;
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
-    private final HashMap<Integer, MinMaxResult> transpositionTable = new HashMap<>();
+    private final HashMap<BoardHash, MinMaxResult> transpositionTable = new HashMap<>();
     private MovesStrategy movesStrategy;
     private Disk aiDisk;
 
@@ -31,7 +32,7 @@ public class AI {
     }
 
     private MinMaxResult lookupOrExecuteMinMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        int boardHash = board.hashCode();
+        BoardHash boardHash = board.getBoardHash();
         if (transpositionTable.containsKey(boardHash)) {
             return transpositionTable.get(boardHash);
         }

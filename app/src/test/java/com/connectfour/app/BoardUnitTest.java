@@ -218,7 +218,7 @@ public class BoardUnitTest {
         Board board1 = new Board();
         Board board2 = new Board();
 
-        assertEquals(board1.hashCode(), board2.hashCode());
+        assertEquals(board1.getBoardHash(), board2.getBoardHash());
     }
 
     @Test
@@ -234,7 +234,7 @@ public class BoardUnitTest {
 
         Board boardCopy = new Board(board);
 
-        assertEquals(board.hashCode(), boardCopy.hashCode());
+        assertEquals(board.getBoardHash(), boardCopy.getBoardHash());
     }
 
     @Test
@@ -251,6 +251,6 @@ public class BoardUnitTest {
         Board boardCopy = new Board(board);
         boardCopy.insertIntoColumn(0, PLAYER_1);
 
-        assertNotEquals(board.hashCode(), boardCopy.hashCode());
+        assertNotEquals(board.getBoardHash(), boardCopy.getBoardHash());
     }
 }

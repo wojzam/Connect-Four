@@ -143,16 +143,23 @@ public class Board {
         return currentPlayerDisk;
     }
 
-    @Override
-    public int hashCode() {
-        Disk[] flatArray = new Disk[width * height];
-        int index = 0;
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
-                flatArray[index++] = values[i][j];
+    public BoardHash getBoardHash() {
+        long hash1 = 0L;
+        long hash2 = 0L;
+        long multiplier = 1L;
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (values[i][j] == PLAYER_1) {
+                    hash1 += multiplier;
+                } else if (values[i][j] == PLAYER_2) {
+                    hash2 += multiplier;
+                }
+                multiplier *= 2L;
             }
         }
-        return Arrays.hashCode(flatArray);
+
+        return new BoardHash(hash1, hash2);
     }
 
     private int findFirstEmptyIndex(int column) {
