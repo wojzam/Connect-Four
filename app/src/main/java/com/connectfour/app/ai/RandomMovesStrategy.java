@@ -8,10 +8,10 @@ import java.util.Collections;
 public class RandomMovesStrategy extends MovesStrategy {
 
     @Override
-    public ArrayList<Integer> getPossibleMoves(Board board) {
-        ArrayList<Integer> possibleMoves = super.getPossibleMoves(board);
-        Collections.shuffle(possibleMoves);
+    public ArrayList<Integer> getAvailableColumns(Board board) {
+        ArrayList<Integer> availableColumns = super.getAvailableColumns(board);
+        Collections.shuffle(availableColumns);
 
-        return possibleMoves;
+        return availableColumns;
     }
 }

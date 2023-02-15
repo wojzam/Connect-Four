@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class OptimalMovesStrategy extends MovesStrategy {
 
-    private static void sortMoves(ArrayList<Integer> possibleMoves, int centerColumn) {
-        possibleMoves.sort((a, b) -> {
+    private static void sortColumns(ArrayList<Integer> availableColumns, int centerColumn) {
+        availableColumns.sort((a, b) -> {
             int diffA = Math.abs(a - centerColumn);
             int diffB = Math.abs(b - centerColumn);
             return Integer.compare(diffA, diffB);
@@ -15,10 +15,10 @@ public class OptimalMovesStrategy extends MovesStrategy {
     }
 
     @Override
-    public ArrayList<Integer> getPossibleMoves(Board board) {
-        ArrayList<Integer> possibleMoves = super.getPossibleMoves(board);
-        sortMoves(possibleMoves, board.getWidth() / 2);
+    public ArrayList<Integer> getAvailableColumns(Board board) {
+        ArrayList<Integer> availableColumns = super.getAvailableColumns(board);
+        sortColumns(availableColumns, board.getWidth() / 2);
 
-        return possibleMoves;
+        return availableColumns;
     }
 }

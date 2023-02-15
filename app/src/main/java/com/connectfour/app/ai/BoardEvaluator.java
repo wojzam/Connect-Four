@@ -8,15 +8,17 @@ import static com.connectfour.app.model.Disk.EMPTY;
 public class BoardEvaluator extends Board {
 
     public static final int SEQUENCE_LENGTH = 4;
+    public static final int SCORE_THREE_IN_ROW = 5;
+    public static final int SCORE_TWO_IN_ROW = 2;
+    public static final int SCORE_THREE_IN_ROW_OPPONENT = -4;
 
     public BoardEvaluator(Board copy) {
         super(copy);
     }
 
     private static int getSequenceScore(Disk[] sequence, Disk playerID) {
-        int score = 0;
-        int playerDiskCount = 0;
-        int emptyCount = 0;
+        byte playerDiskCount = 0;
+        byte emptyCount = 0;
 
         for (Disk value : sequence) {
             if (value == playerID) {
@@ -27,13 +29,15 @@ public class BoardEvaluator extends Board {
         }
 
         if (playerDiskCount == 3 && emptyCount == 1) {
-            score += 5;
-        } else if (playerDiskCount == 2 && emptyCount == 2) {
-            score += 2;
-        } else if (playerDiskCount == 0 && emptyCount == 1) {
-            score -= 4;
+            return SCORE_THREE_IN_ROW;
         }
-        return score;
+        if (playerDiskCount == 2 && emptyCount == 2) {
+            return SCORE_TWO_IN_ROW;
+        }
+        if (playerDiskCount == 0 && emptyCount == 1) {
+            return SCORE_THREE_IN_ROW_OPPONENT;
+        }
+        return 0;
     }
 
     public int evaluate(Disk playerID) {

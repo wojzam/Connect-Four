@@ -16,8 +16,8 @@ public class AI {
     private MovesStrategy movesStrategy;
     private Disk aiDisk;
 
-    private ArrayList<Integer> getPossibleMoves(Board board) {
-        return movesStrategy.getPossibleMoves(board);
+    private ArrayList<Integer> getAvailableColumns(Board board) {
+        return movesStrategy.getAvailableColumns(board);
     }
 
     public int chooseColumn(Board board, int depth) {
@@ -56,18 +56,18 @@ public class AI {
         }
 
         board.changePlayer();
-        ArrayList<Integer> possibleMoves = getPossibleMoves(board);
+        ArrayList<Integer> availableColumns = getAvailableColumns(board);
         int bestScore = maximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        int column = possibleMoves.get(0);
+        int bestColumn = -1;
 
-        for (int col : possibleMoves) {
-            board.insertIntoColumn(col);
+        for (int column : availableColumns) {
+            board.insertIntoColumn(column);
             int score = lookupOrExecuteMinMax(board, depth - 1, alpha, beta, !maximizingPlayer).getScore();
-            board.removeTopDiskFromColumn(col);
+            board.removeTopDiskFromColumn(column);
 
             if ((maximizingPlayer && score > bestScore) || (!maximizingPlayer && score < bestScore)) {
                 bestScore = score;
-                column = col;
+                bestColumn = column;
             }
 
             if (maximizingPlayer) {
@@ -82,6 +82,6 @@ public class AI {
         }
 
         board.changePlayer();
-        return new MinMaxResult(column, bestScore);
+        return new MinMaxResult(bestColumn, bestScore);
     }
 }

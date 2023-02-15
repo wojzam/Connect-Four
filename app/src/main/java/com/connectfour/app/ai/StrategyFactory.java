@@ -4,9 +4,10 @@ public class StrategyFactory {
 
     private static final MovesStrategy randomStrategy = new RandomMovesStrategy();
     private static final MovesStrategy optimalStrategy = new OptimalMovesStrategy();
+    private static final int RANDOM_STRATEGY_THRESHOLD = 8;
 
     public static MovesStrategy getStrategy(int depth) {
-        if (depth < 7) {
+        if (depth <= RANDOM_STRATEGY_THRESHOLD) {
             return randomStrategy;
         }
         return optimalStrategy;
