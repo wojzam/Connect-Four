@@ -3,13 +3,13 @@ package com.connectfour.app.controller;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.connectfour.app.model.GameModelInterface;
-import com.connectfour.app.views.ColumnLayout;
+import com.connectfour.app.views.GameObserver;
 import com.connectfour.app.views.GameView;
 
 public class GameController {
 
     private final GameModelInterface model;
-    private final GameView view;
+    private final GameObserver view;
 
     public GameController(GameModelInterface model, ConstraintLayout layout) {
         this.model = model;
@@ -18,18 +18,16 @@ public class GameController {
 
     public void restart() {
         model.restart();
-        view.updateBoard();
-        view.updateGameStatus();
+        view.update();
     }
 
-    public void columnClickAction(ColumnLayout clickedColumn) {
-        model.columnClickAction(clickedColumn.getIndex());
+    public void columnClicked(int clickedColumn) {
+        model.playTurn(clickedColumn);
     }
 
-    public void undoButtonClicked() {
+    public void undoClicked() {
         model.undoTurn();
-        view.updateBoard();
-        view.updateGameStatus();
+        view.update();
     }
 
 }

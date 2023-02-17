@@ -1,4 +1,4 @@
-package com.connectfour.app.commands;
+package com.connectfour.app.model.commands;
 
 public interface Command {
 

@@ -2,6 +2,7 @@ package com.connectfour.app.views;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.view.View;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,33 +10,33 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.connectfour.app.R;
 import com.connectfour.app.controller.GameController;
-import com.connectfour.app.model.Board;
 import com.connectfour.app.model.GameModelInterface;
 
 public class GameView implements GameObserver {
 
-    private final Board board;
+    private final GameModelInterface model;
+    private final GameController controller;
     private final BoardLayout boardLayout;
     private final GameStateTextView gameStateText;
     private final AppCompatButton undoButton;
     private final AppCompatButton newGameButton;
 
     public GameView(GameModelInterface model, GameController controller, ConstraintLayout mainLayout) {
-        this.board = model.getBoard();
-        this.boardLayout = new BoardLayout(mainLayout.getContext(), board);
+        this.model = model;
+        this.controller = controller;
+        this.boardLayout = new BoardLayout(mainLayout.getContext(), model.getBoard());
         this.gameStateText = new GameStateTextView(mainLayout.getContext());
         this.undoButton = new CustomButton(mainLayout.getContext(), R.string.undo);
         this.newGameButton = new CustomButton(mainLayout.getContext(), R.string.new_game);
 
         arrangeViews(mainLayout);
-        updateBoard();
-        updateGameStatus();
+        update();
 
         model.addGameObserver(this);
 
-        boardLayout.columnsSetOnClickListener(view -> controller.columnClickAction((ColumnLayout) view));
+        boardLayout.columnsSetOnClickListener(this::columnClicked);
         newGameButton.setOnClickListener(view -> controller.restart());
-        undoButton.setOnClickListener(view -> controller.undoButtonClicked());
+        undoButton.setOnClickListener(view -> controller.undoClicked());
     }
 
     private static int dpToPixel(float dp, Context context) {
@@ -43,28 +44,24 @@ public class GameView implements GameObserver {
     }
 
     @Override
-    public void updateBoard() {
-        boardLayout.refresh();
+    public void update() {
+        boardLayout.update();
+        gameStateText.update(model.getBoard());
+        setUndoEnabled(model.canUndo());
     }
 
     @Override
-    public void updateColumn(int index) {
-        boardLayout.refreshColumn(index);
+    public void requestPlayerMove() {
+        boardLayout.setEnabled(true);
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        boardLayout.setEnabled(enabled);
-        setUndoEnabled(enabled);
+    private void columnClicked(View view) {
+        int clickedColumnIndex = ((ColumnLayout) view).getIndex();
+        boardLayout.setEnabled(false);
+        controller.columnClicked(clickedColumnIndex);
     }
 
-    @Override
-    public void updateGameStatus() {
-        gameStateText.update(board);
-    }
-
-    @Override
-    public void setUndoEnabled(boolean enabled) {
+    private void setUndoEnabled(boolean enabled) {
         undoButton.setEnabled(enabled);
         if (enabled) {
             undoButton.setBackgroundResource(R.drawable.button_bg);

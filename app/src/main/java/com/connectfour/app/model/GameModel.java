@@ -5,8 +5,8 @@ import android.os.Looper;
 
 import com.connectfour.app.Settings;
 import com.connectfour.app.ai.AI;
-import com.connectfour.app.commands.CommandHistory;
-import com.connectfour.app.commands.PlayTurn;
+import com.connectfour.app.model.commands.CommandHistory;
+import com.connectfour.app.model.commands.PlayTurn;
 import com.connectfour.app.views.GameObserver;
 
 import java.util.ArrayList;
@@ -34,21 +34,11 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public Board getBoard() {
-        return board;
-    }
-
-    @Override
     public void restart() {
         board.reset();
         commands.clear();
         resetExecutor();
-        if (isAIOpponentTurn()) {
-            aiTurn();
-        } else {
-            gameObservers.forEach(gameObserver -> gameObserver.setEnabled(true));
-        }
-        gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
+        handleNextTurn();
     }
 
     private void resetExecutor() {
@@ -58,31 +48,9 @@ public class GameModel implements GameModelInterface {
         aiTurnExecutor = Executors.newSingleThreadExecutor();
     }
 
-    private void playTurn(int chosenColumn) {
-        commands.executeAndSave(new PlayTurn(board, chosenColumn));
-        gameObservers.forEach(gameObserver -> gameObserver.updateColumn(chosenColumn));
-        gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
-    }
-
     @Override
-    public void undoTurn() {
-        commands.undoLastCommand();
-        if (isAIOpponentEnabled()) {
-            commands.undoLastCommand();
-        }
-        gameObservers.forEach(gameObserver -> gameObserver.setUndoEnabled(canUndo()));
-    }
-
-    private boolean canUndo() {
-        return commands.size() > 0;
-    }
-
-    @Override
-    public void columnClickAction(int columnIndex) {
-        if (board.canInsertInColumn(columnIndex)) {
-            playTurn(columnIndex);
-            finalizeTurn();
-        }
+    public boolean canUndo() {
+        return !commands.isEmpty();
     }
 
     private boolean isAIOpponentEnabled() {
@@ -93,20 +61,42 @@ public class GameModel implements GameModelInterface {
         return isAIOpponentEnabled() && board.getCurrentPlayerDisk() == settings.getAIPlayerDisk();
     }
 
-    private void finalizeTurn() {
-        if (board.currentPlayerWonGame() || board.isFull()) {
-            gameObservers.forEach(gameObserver -> gameObserver.setEnabled(false));
-        } else {
-            board.changePlayer();
-            if (isAIOpponentTurn()) {
-                aiTurn();
-            }
+    private boolean isNotFirstTurnAI() {
+        return !(commands.isEmpty() && isAIOpponentTurn());
+    }
+
+    @Override
+    public void playTurn(int chosenColumn) {
+        PlayTurn playTurn = new PlayTurn(board, chosenColumn);
+        if (isNotFirstTurnAI()) {
+            commands.push(playTurn);
         }
-        gameObservers.forEach(GameObserver::updateGameStatus);
+        playTurn.execute();
+        gameObservers.forEach(GameObserver::update);
+
+        if (!playTurn.isGameOver()) {
+            handleNextTurn();
+        }
+    }
+
+    @Override
+    public void undoTurn() {
+        commands.undoLastCommand();
+        if (isAIOpponentTurn()) {
+            commands.undoLastCommand();
+        }
+        gameObservers.forEach(GameObserver::requestPlayerMove);
+    }
+
+    private void handleNextTurn() {
+        if (isAIOpponentTurn()) {
+            aiTurn();
+        } else {
+            gameObservers.forEach(GameObserver::requestPlayerMove);
+        }
     }
 
     private void aiTurn() {
-        gameObservers.forEach(gameObserver -> gameObserver.setEnabled(false));
         final Handler aiTurnHandler = new Handler(Looper.getMainLooper());
 
         aiTurnExecutor.execute(() -> {
@@ -114,12 +104,13 @@ public class GameModel implements GameModelInterface {
             if (Thread.interrupted()) {
                 return;
             }
-            aiTurnHandler.post(() -> {
-                playTurn(aiColumn);
-                gameObservers.forEach(gameObserver -> gameObserver.setEnabled(true));
-                finalizeTurn();
-            });
+            aiTurnHandler.post(() -> playTurn(aiColumn));
         });
+    }
+
+    @Override
+    public Board getBoard() {
+        return board;
     }
 
 }

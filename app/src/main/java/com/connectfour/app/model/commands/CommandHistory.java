@@ -1,13 +1,8 @@
-package com.connectfour.app.commands;
+package com.connectfour.app.model.commands;
 
 import java.util.Stack;
 
 public class CommandHistory extends Stack<Command> {
-
-    public void executeAndSave(Command command) {
-        command.execute();
-        push(command);
-    }
 
     public void undoLastCommand() {
         if (!isEmpty()) {

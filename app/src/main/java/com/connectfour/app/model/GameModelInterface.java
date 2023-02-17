@@ -8,9 +8,11 @@ public interface GameModelInterface {
 
     void restart();
 
-    void columnClickAction(int index);
+    void playTurn(int chosenColumn);
 
     void undoTurn();
+
+    boolean canUndo();
 
     Board getBoard();
 }

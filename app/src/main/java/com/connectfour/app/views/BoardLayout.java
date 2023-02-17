@@ -29,16 +29,18 @@ public class BoardLayout extends LinearLayout {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        columns.forEach(columnLayout -> columnLayout.setEnabled(enabled));
+        if (enabled) {
+            for (int columnIndex : board.getAvailableColumns()) {
+                columns.get(columnIndex).setEnabled(true);
+            }
+        } else {
+            columns.forEach(columnLayout -> columnLayout.setEnabled(false));
+        }
     }
 
-    public void refreshColumn(int column) {
-        columns.get(column).refresh(board.getColumnValues(column));
-    }
-
-    public void refresh() {
+    public void update() {
         for (int i = 0; i < columns.size(); i++) {
-            refreshColumn(i);
+            columns.get(i).refresh(board.getColumnValues(i));
         }
     }
 
