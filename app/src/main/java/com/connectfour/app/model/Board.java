@@ -1,5 +1,6 @@
 package com.connectfour.app.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.connectfour.app.model.Disk.EMPTY;
@@ -119,16 +120,26 @@ public class Board {
         return true;
     }
 
+    public ArrayList<Integer> getAvailableColumns() {
+        ArrayList<Integer> availableColumns = new ArrayList<>(width);
+        for (int i = 0; i < width; i++) {
+            if (canInsertInColumn(i)) {
+                availableColumns.add(i);
+            }
+        }
+        return availableColumns;
+    }
+
+    public Disk[] getColumnValues(int column) {
+        return Arrays.copyOf(values[column], height);
+    }
+
     public Disk[][] getValues() {
         Disk[][] valuesCopy = new Disk[width][height];
         for (int i = 0; i < width; i++) {
             valuesCopy[i] = getColumnValues(i);
         }
         return valuesCopy;
-    }
-
-    public Disk[] getColumnValues(int column) {
-        return Arrays.copyOf(values[column], height);
     }
 
     public int getWidth() {

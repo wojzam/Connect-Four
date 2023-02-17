@@ -15,10 +15,6 @@ public class AI {
     private final HashMap<BoardHash, MinMaxResult> transpositionTable = new HashMap<>();
     private Disk aiDisk;
 
-    private ArrayList<Integer> getAvailableColumns(Board board, int depth) {
-        return StrategyFactory.getStrategy(depth).getAvailableColumns(board);
-    }
-
     public int chooseColumn(Board board, int depth) {
         assert depth > 0 : "Depth should be greater than zero";
         aiDisk = board.getCurrentPlayerDisk();
@@ -54,7 +50,7 @@ public class AI {
         }
 
         board.changePlayer();
-        ArrayList<Integer> availableColumns = getAvailableColumns(board, depth);
+        ArrayList<Integer> availableColumns = MovesOrder.getAvailableColumns(board, depth);
         int bestScore = maximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         int bestColumn = -1;
 
