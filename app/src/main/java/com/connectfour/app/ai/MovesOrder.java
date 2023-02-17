@@ -2,14 +2,14 @@ package com.connectfour.app.ai;
 
 import com.connectfour.app.model.Board;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MovesOrder {
 
     private static final int RANDOM_ORDER_THRESHOLD = 3;
 
-    private static void sortByDistanceToCenter(ArrayList<Integer> columns, int centralColumn) {
+    private static void sortByDistanceToCenter(List<Integer> columns, int centralColumn) {
         columns.sort((a, b) -> {
             int diffA = Math.abs(a - centralColumn);
             int diffB = Math.abs(b - centralColumn);
@@ -17,8 +17,8 @@ public class MovesOrder {
         });
     }
 
-    public static ArrayList<Integer> getAvailableColumns(Board board, int depth) {
-        ArrayList<Integer> availableColumns = board.getAvailableColumns();
+    public static List<Integer> getAvailableColumns(Board board, int depth) {
+        List<Integer> availableColumns = board.getAvailableColumns();
         if (depth <= RANDOM_ORDER_THRESHOLD) {
             Collections.shuffle(availableColumns);
         } else {

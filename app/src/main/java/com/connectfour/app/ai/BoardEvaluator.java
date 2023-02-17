@@ -16,12 +16,12 @@ public class BoardEvaluator extends Board {
         super(copy);
     }
 
-    private static int getSequenceScore(Disk[] sequence, Disk playerID) {
+    private static int getSequenceScore(Disk[] sequence, Disk playerDisk) {
         byte playerDiskCount = 0;
         byte emptyCount = 0;
 
         for (Disk value : sequence) {
-            if (value == playerID) {
+            if (value == playerDisk) {
                 playerDiskCount += 1;
             } else if (value == EMPTY) {
                 emptyCount += 1;
@@ -40,7 +40,7 @@ public class BoardEvaluator extends Board {
         return 0;
     }
 
-    public int evaluate(Disk playerID) {
+    public int evaluateFor(Disk playerDisk) {
         Disk[] sequence = new Disk[SEQUENCE_LENGTH];
         int[][] directions = {{0, 1}, {1, 0}, {1, 1}, {-1, 1}};
         int score = 0;
@@ -60,7 +60,7 @@ public class BoardEvaluator extends Board {
                         y += direction[1];
                     }
                     if (k == SEQUENCE_LENGTH) {
-                        score += getSequenceScore(sequence, playerID);
+                        score += getSequenceScore(sequence, playerDisk);
                     }
                 }
             }

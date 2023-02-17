@@ -4,8 +4,8 @@ import com.connectfour.app.model.Board;
 import com.connectfour.app.model.BoardHash;
 import com.connectfour.app.model.Disk;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AI {
 
@@ -45,12 +45,12 @@ public class AI {
             return new MinMaxResult(-1, TIE_MOVE_SCORE);
         }
         if (depth == 0) {
-            int score = ((BoardEvaluator) board).evaluate(aiDisk);
+            int score = ((BoardEvaluator) board).evaluateFor(aiDisk);
             return new MinMaxResult(-1, score);
         }
 
         board.changePlayer();
-        ArrayList<Integer> availableColumns = MovesOrder.getAvailableColumns(board, depth);
+        List<Integer> availableColumns = MovesOrder.getAvailableColumns(board, depth);
         int bestScore = maximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         int bestColumn = -1;
 

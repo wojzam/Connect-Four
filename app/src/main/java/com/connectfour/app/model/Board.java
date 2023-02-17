@@ -2,6 +2,7 @@ package com.connectfour.app.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.connectfour.app.model.Disk.EMPTY;
 import static com.connectfour.app.model.Disk.PLAYER_1;
@@ -120,8 +121,8 @@ public class Board {
         return true;
     }
 
-    public ArrayList<Integer> getAvailableColumns() {
-        ArrayList<Integer> availableColumns = new ArrayList<>(width);
+    public List<Integer> getAvailableColumns() {
+        List<Integer> availableColumns = new ArrayList<>(width);
         for (int i = 0; i < width; i++) {
             if (canInsertInColumn(i)) {
                 availableColumns.add(i);
