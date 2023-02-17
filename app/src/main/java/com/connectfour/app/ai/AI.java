@@ -7,14 +7,35 @@ import com.connectfour.app.model.Disk;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Represents the {@link AI} opponent in the Connect Four game.
+ * It uses the MinMax algorithm with alpha-beta pruning and transposition table to make its moves.
+ */
 public class AI {
-
     private static final int WINING_MOVE_SCORE = 1000000000;
     private static final int LOSING_MOVE_SCORE = -1000000000;
     private static final int TIE_MOVE_SCORE = 0;
+
+    /**
+     * A hash map used to store previously calculated {@link MinMaxResult} in order to avoid recalculating them.
+     * The keys are {@link BoardHash} objects that represent the state of the game {@link Board}, and the values are MinMaxResult
+     * objects that contain the score of the best move and the column where the disk should be placed.
+     */
     private final HashMap<BoardHash, MinMaxResult> transpositionTable = new HashMap<>();
+
+    /**
+     * {@link Disk} of the {@link AI} player, which is used to evaluate {@link Board} state.
+     */
     private Disk aiDisk;
 
+    /**
+     * Chooses the best column to play using the Minimax algorithm with alpha-beta pruning and transposition tables.
+     * The method returns the column number with the highest score indicating the best move.
+     *
+     * @param board the current game board
+     * @param depth the depth of the MinMax algorithm search
+     * @return the chosen column number
+     */
     public int chooseColumn(Board board, int depth) {
         assert depth > 0 : "Depth should be greater than zero";
         aiDisk = board.getCurrentPlayerDisk();
@@ -25,6 +46,18 @@ public class AI {
         return lookupOrExecuteMinMax(boardCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
     }
 
+    /**
+     * Looks up the transposition table to see if the given game state is already present. If it is present,
+     * the method returns the corresponding {@link MinMaxResult}. Otherwise, it executes the MinMax algorithm
+     * and returns the resulting MinMaxResult. The result is also added to the transposition table.
+     *
+     * @param board            the current game board
+     * @param depth            the depth of the MinMax algorithm search
+     * @param alpha            the alpha value for alpha-beta pruning
+     * @param beta             the beta value for alpha-beta pruning
+     * @param maximizingPlayer whether the current player is trying to maximize their score or not
+     * @return the MinMaxResult for the given game state
+     */
     private MinMaxResult lookupOrExecuteMinMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
         BoardHash boardHash = board.getBoardHash();
         if (transpositionTable.containsKey(boardHash)) {
@@ -36,6 +69,16 @@ public class AI {
         return result;
     }
 
+    /**
+     * Runs the MinMax algorithm on the given board and returns {@link MinMaxResult}.
+     *
+     * @param board            the current game board
+     * @param depth            the depth of the MinMax algorithm search
+     * @param alpha            the alpha value for alpha-beta pruning
+     * @param beta             the beta value for alpha-beta pruning
+     * @param maximizingPlayer whether the current player is trying to maximize their score or not
+     * @return the MinMaxResult for the given game state
+     */
     private MinMaxResult minMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
         if (board.currentPlayerWonGame()) {
             int score = maximizingPlayer ? LOSING_MOVE_SCORE - depth : WINING_MOVE_SCORE + depth;
