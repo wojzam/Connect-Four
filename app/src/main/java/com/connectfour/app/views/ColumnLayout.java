@@ -1,6 +1,7 @@
 package com.connectfour.app.views;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 
 import com.connectfour.app.R;
+import com.connectfour.app.model.Board;
 import com.connectfour.app.model.Disk;
 
 import static com.connectfour.app.model.Disk.EMPTY;
@@ -84,9 +86,13 @@ public class ColumnLayout extends LinearLayout {
     }
 
     private void createAndAddDisks(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int margin = (int) context.getResources().getDimension(R.dimen.board_margin);
+        int availableWidth = displayMetrics.widthPixels - 2 * margin;
+        int diskSize = (int) (availableWidth / (Board.WIDTH_DEFAULT));
+
         for (int i = 0; i < disks.length; i++) {
-            int size = 140; // TODO size should dynamically fit the screen
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(diskSize, diskSize);
             disks[i] = new ImageView(context);
             disks[i].setLayoutParams(layoutParams);
             setDiskImageResource(disks[i], values[i]);
