@@ -1,7 +1,5 @@
 package com.connectfour.app.views;
 
-import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -39,10 +37,6 @@ public class GameView implements GameObserver {
         undoButton.setOnClickListener(view -> controller.undoClicked());
     }
 
-    private static int dpToPixel(float dp, Context context) {
-        return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
     @Override
     public void update() {
         boardLayout.update();
@@ -71,7 +65,7 @@ public class GameView implements GameObserver {
     }
 
     private void arrangeViews(ConstraintLayout mainLayout) {
-        int buttonsMargin = dpToPixel(15, mainLayout.getContext());
+        int buttonsMargin = (int) mainLayout.getResources().getDimension(R.dimen.button_margin);
 
         mainLayout.addView(boardLayout);
         mainLayout.addView(gameStateText);
