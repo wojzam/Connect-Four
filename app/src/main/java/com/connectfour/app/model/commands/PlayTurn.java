@@ -6,7 +6,7 @@ public class PlayTurn implements Command {
 
     private final Board board;
     private final int chosenColumn;
-    private boolean gameOver;
+    private boolean gameInProgress;
 
     public PlayTurn(Board board, int chosenColumn) {
         this.board = board;
@@ -16,8 +16,8 @@ public class PlayTurn implements Command {
     @Override
     public void execute() {
         board.insertIntoColumn(chosenColumn);
-        gameOver = hasGameEnded();
-        if (!gameOver) {
+        gameInProgress = !hasGameEnded();
+        if (gameInProgress) {
             board.changePlayer();
         }
     }
@@ -25,13 +25,13 @@ public class PlayTurn implements Command {
     @Override
     public void undo() {
         board.removeTopDiskFromColumn(chosenColumn);
-        if (!gameOver) {
+        if (gameInProgress) {
             board.changePlayer();
         }
     }
 
-    public boolean isGameOver() {
-        return gameOver;
+    public boolean isGameInProgress() {
+        return gameInProgress;
     }
 
     private boolean hasGameEnded() {

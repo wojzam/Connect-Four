@@ -74,7 +74,7 @@ public class GameModel implements GameModelInterface {
         playTurn.execute();
         gameObservers.forEach(GameObserver::update);
 
-        if (!playTurn.isGameOver()) {
+        if (playTurn.isGameInProgress()) {
             handleNextTurn();
         }
     }
