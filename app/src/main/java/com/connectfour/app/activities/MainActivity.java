@@ -9,13 +9,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.connectfour.app.R;
 import com.connectfour.app.Settings;
+import com.connectfour.app.controller.ControllerInterface;
 import com.connectfour.app.controller.GameController;
 import com.connectfour.app.model.GameModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private Settings settings;
-    private GameController controller;
+    private ControllerInterface controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

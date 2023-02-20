@@ -1,10 +1,10 @@
 package com.connectfour.app.model;
 
-import com.connectfour.app.views.GameObserver;
+import com.connectfour.app.views.ViewInterface;
 
-public interface GameModelInterface {
+public interface ModelInterface {
 
-    void addGameObserver(GameObserver observer);
+    void addGameObserver(ViewInterface observer);
 
     void restart();
 

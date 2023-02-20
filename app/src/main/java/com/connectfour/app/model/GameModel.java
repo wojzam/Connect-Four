@@ -7,19 +7,20 @@ import com.connectfour.app.Settings;
 import com.connectfour.app.ai.AI;
 import com.connectfour.app.model.commands.CommandHistory;
 import com.connectfour.app.model.commands.PlayTurn;
-import com.connectfour.app.views.GameObserver;
+import com.connectfour.app.views.ViewInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class GameModel implements GameModelInterface {
+
+public class GameModel implements ModelInterface {
 
     private final Settings settings;
     private final Board board = new Board();
     private final CommandHistory commands = new CommandHistory();
-    private final List<GameObserver> gameObservers = new ArrayList<>();
+    private final List<ViewInterface> gameObservers = new ArrayList<>();
     private final AI ai = new AI();
     private ExecutorService aiTurnExecutor;
 
@@ -29,7 +30,7 @@ public class GameModel implements GameModelInterface {
     }
 
     @Override
-    public void addGameObserver(GameObserver observer) {
+    public void addGameObserver(ViewInterface observer) {
         gameObservers.add(observer);
     }
 
@@ -72,7 +73,7 @@ public class GameModel implements GameModelInterface {
             commands.push(playTurn);
         }
         playTurn.execute();
-        gameObservers.forEach(GameObserver::update);
+        gameObservers.forEach(ViewInterface::update);
 
         if (playTurn.isGameInProgress()) {
             handleNextTurn();
@@ -85,14 +86,14 @@ public class GameModel implements GameModelInterface {
         if (isAIOpponentTurn()) {
             commands.undoLastCommand();
         }
-        gameObservers.forEach(GameObserver::requestPlayerMove);
+        gameObservers.forEach(ViewInterface::requestPlayerMove);
     }
 
     private void handleNextTurn() {
         if (isAIOpponentTurn()) {
             aiTurn();
         } else {
-            gameObservers.forEach(GameObserver::requestPlayerMove);
+            gameObservers.forEach(ViewInterface::requestPlayerMove);
         }
     }
 

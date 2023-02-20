@@ -1,6 +1,6 @@
 package com.connectfour.app.views;
 
-public interface GameObserver {
+public interface ViewInterface {
 
     void update();
 

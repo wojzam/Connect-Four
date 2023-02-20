@@ -7,19 +7,18 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.connectfour.app.R;
-import com.connectfour.app.controller.GameController;
-import com.connectfour.app.model.GameModelInterface;
+import com.connectfour.app.controller.ControllerInterface;
+import com.connectfour.app.model.ModelInterface;
 
-public class GameView implements GameObserver {
-
-    private final GameModelInterface model;
-    private final GameController controller;
+public class GameView implements ViewInterface {
+    private final ModelInterface model;
+    private final ControllerInterface controller;
     private final BoardLayout boardLayout;
     private final GameStateTextView gameStateText;
     private final AppCompatButton undoButton;
     private final AppCompatButton newGameButton;
 
-    public GameView(GameModelInterface model, GameController controller, ConstraintLayout mainLayout) {
+    public GameView(ModelInterface model, ControllerInterface controller, ConstraintLayout mainLayout) {
         this.model = model;
         this.controller = controller;
         this.boardLayout = new BoardLayout(mainLayout.getContext(), model.getBoard());
