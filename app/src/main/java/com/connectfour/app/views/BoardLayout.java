@@ -4,21 +4,24 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+
 import com.connectfour.app.model.Board;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoardLayout extends LinearLayout {
 
     private final Board board;
-    private final ArrayList<ColumnLayout> columns = new ArrayList<>();
+    private final List<ColumnLayout> columns = new ArrayList<>();
 
     public BoardLayout(Context context) {
         super(context);
         throw new UnsupportedOperationException("This constructor is not supported");
     }
 
-    public BoardLayout(Context context, Board board) {
+    public BoardLayout(@NonNull Context context, @NonNull Board board) {
         super(context);
         this.board = board;
         setId(View.generateViewId());
@@ -40,7 +43,7 @@ public class BoardLayout extends LinearLayout {
 
     public void update() {
         for (int i = 0; i < columns.size(); i++) {
-            columns.get(i).refresh(board.getColumnValues(i));
+            columns.get(i).update(board.getColumnValues(i));
         }
     }
 

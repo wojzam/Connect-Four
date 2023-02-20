@@ -16,66 +16,56 @@ import static com.connectfour.app.model.Disk.EMPTY;
 
 public class ColumnLayout extends LinearLayout {
 
-    private final ImageView[] disks;
+    private final ImageView[] disksImages;
     private final int index;
-    private Disk[] values;
+    private Disk[] disks;
 
     public ColumnLayout(Context context) {
         super(context);
         throw new UnsupportedOperationException("This constructor is not supported");
     }
 
-    public ColumnLayout(@NonNull Context context, @NonNull Disk[] values, int index) {
+    public ColumnLayout(@NonNull Context context, @NonNull Disk[] disks, int index) {
         super(context);
-        this.disks = new ImageView[values.length];
-        this.values = values;
+        this.disksImages = new ImageView[disks.length];
+        this.disks = disks;
         this.index = index;
         configure();
         createAndAddDisks(context);
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void refresh(@NonNull Disk[] newValues) {
-        assert newValues.length == values.length : "Received invalid values array";
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] != newValues[i]) {
-                animateDisk(newValues[i], i);
+    public void update(@NonNull Disk[] newDisks) {
+        assert newDisks.length == disks.length : "Received invalid disks array";
+        for (int i = 0; i < disks.length; i++) {
+            if (disks[i] != newDisks[i]) {
+                animateDisk(newDisks[i], i);
+                setDiskImageResource(disksImages[i], newDisks[i]);
             }
-            setDiskImageResource(disks[i], newValues[i]);
         }
-        values = newValues;
+        disks = newDisks;
     }
 
-    private void animateDisk(Disk value, int index) {
-        final int diskHeight = disks[index].getHeight();
-        if (value == EMPTY) {
-            disks[index].setScaleX(0);
-            disks[index].setScaleY(0);
-            disks[index].animate().scaleX(1).scaleY(1).setDuration(400).start();
+    private void animateDisk(Disk disk, int index) {
+        if (disk == EMPTY) {
+            animateEmptyDisk(index);
         } else {
-            disks[index].setTranslationY(diskHeight * (index - values.length));
-            disks[index].animate().translationY(0)
-                    .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(100L * (values.length - index))
-                    .start();
+            animatePlayerDisk(index);
         }
     }
 
-    private void setDiskImageResource(ImageView disk, Disk value) {
-        assert disk != null : "Disk ImageView is null";
-        switch (value) {
-            case PLAYER_1:
-                disk.setImageResource(R.drawable.disk_player1);
-                break;
-            case PLAYER_2:
-                disk.setImageResource(R.drawable.disk_player2);
-                break;
-            default:
-                disk.setImageResource(R.drawable.disk_empty);
-        }
+    private void animateEmptyDisk(int index) {
+        disksImages[index].setScaleX(0);
+        disksImages[index].setScaleY(0);
+        disksImages[index].animate().scaleX(1).scaleY(1).setDuration(400).start();
+    }
+
+    private void animatePlayerDisk(int index) {
+        int diskHeight = disksImages[index].getHeight();
+        disksImages[index].setTranslationY(diskHeight * (index - disks.length));
+        disksImages[index].animate().translationY(0)
+                .setInterpolator(new AccelerateInterpolator())
+                .setDuration(100L * (disks.length - index))
+                .start();
     }
 
     private void configure() {
@@ -89,15 +79,32 @@ public class ColumnLayout extends LinearLayout {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int margin = (int) context.getResources().getDimension(R.dimen.board_margin);
         int availableWidth = displayMetrics.widthPixels - 2 * margin;
-        int diskSize = (int) (availableWidth / (Board.WIDTH_DEFAULT));
+        int diskSize = availableWidth / (Board.WIDTH_DEFAULT);
 
-        for (int i = 0; i < disks.length; i++) {
+        for (int i = 0; i < disksImages.length; i++) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(diskSize, diskSize);
-            disks[i] = new ImageView(context);
-            disks[i].setLayoutParams(layoutParams);
-            setDiskImageResource(disks[i], values[i]);
+            disksImages[i] = new ImageView(context);
+            disksImages[i].setLayoutParams(layoutParams);
+            setDiskImageResource(disksImages[i], disks[i]);
 
-            this.addView(disks[i], 0);
+            addView(disksImages[i], 0);
         }
+    }
+
+    private void setDiskImageResource(ImageView diskImage, Disk disk) {
+        switch (disk) {
+            case PLAYER_1:
+                diskImage.setImageResource(R.drawable.disk_player1);
+                break;
+            case PLAYER_2:
+                diskImage.setImageResource(R.drawable.disk_player2);
+                break;
+            default:
+                diskImage.setImageResource(R.drawable.disk_empty);
+        }
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

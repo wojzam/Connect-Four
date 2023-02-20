@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
@@ -19,7 +20,7 @@ public class GameStateTextView extends AppCompatTextView {
     private final int colorPlayer2;
     private final int colorNeutral;
 
-    public GameStateTextView(Context context) {
+    public GameStateTextView(@NonNull Context context) {
         super(context);
         setId(View.generateViewId());
         setTypeface(Typeface.SERIF);
@@ -30,7 +31,7 @@ public class GameStateTextView extends AppCompatTextView {
         colorNeutral = ContextCompat.getColor(context, R.color.white);
     }
 
-    public void update(Board board) {
+    public void update(@NonNull Board board) {
         final Disk currentPlayerID = board.getCurrentPlayerDisk();
         if (board.currentPlayerWonGame()) {
             if (currentPlayerID == PLAYER_1) {
