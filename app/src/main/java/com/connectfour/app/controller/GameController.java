@@ -22,14 +22,14 @@ public class GameController implements ControllerInterface {
     /**
      * Constructs a new {@code GameController} object with the given {@link ModelInterface} and {@link ConstraintLayout}.
      * This constructor also creates {@link GameView} which creates all game views
-     * in the specified {@code layout} parameter.
+     * in the specified {@code gameLayout} parameter.
      *
      * @param model  the GameModelInterface object to use for the game logic
-     * @param layout the ConstraintLayout object to use as the game view layout
+     * @param gameLayout the ConstraintLayout object to use as layout for the game views
      */
-    public GameController(ModelInterface model, ConstraintLayout layout) {
+    public GameController(ModelInterface model, ConstraintLayout gameLayout) {
         this.model = model;
-        this.view = new GameView(model, this, layout);
+        this.view = new GameView(model, this, gameLayout);
     }
 
     /**

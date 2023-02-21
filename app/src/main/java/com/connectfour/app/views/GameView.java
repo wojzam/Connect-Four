@@ -34,17 +34,17 @@ public class GameView implements ViewInterface {
      *
      * @param model      the GameModelInterface to be used by this GameView
      * @param controller the GameController to be used by this GameView
-     * @param mainLayout the ConstraintLayout to use as the game view layout
+     * @param gameLayout the ConstraintLayout to use as layout for the game views
      */
-    public GameView(ModelInterface model, ControllerInterface controller, ConstraintLayout mainLayout) {
+    public GameView(ModelInterface model, ControllerInterface controller, ConstraintLayout gameLayout) {
         this.model = model;
         this.controller = controller;
-        this.boardLayout = new BoardLayout(mainLayout.getContext(), model.getBoard());
-        this.gameStateText = new GameStateTextView(mainLayout.getContext());
-        this.undoButton = new CustomButton(mainLayout.getContext(), R.string.undo);
-        this.newGameButton = new CustomButton(mainLayout.getContext(), R.string.new_game);
+        this.boardLayout = new BoardLayout(gameLayout.getContext(), model.getBoard());
+        this.gameStateText = new GameStateTextView(gameLayout.getContext());
+        this.undoButton = new CustomButton(gameLayout.getContext(), R.string.undo);
+        this.newGameButton = new CustomButton(gameLayout.getContext(), R.string.new_game);
 
-        arrangeViews(mainLayout);
+        arrangeViews(gameLayout);
         update();
 
         model.addGameObserver(this);
@@ -105,37 +105,37 @@ public class GameView implements ViewInterface {
     /**
      * Arranges the views within the layout.
      *
-     * @param mainLayout the main layout used to display game views
+     * @param layout the layout for the game views
      */
-    private void arrangeViews(ConstraintLayout mainLayout) {
-        int buttonsMargin = (int) mainLayout.getResources().getDimension(R.dimen.button_margin);
+    private void arrangeViews(ConstraintLayout layout) {
+        int buttonsMargin = (int) layout.getResources().getDimension(R.dimen.button_margin);
 
-        mainLayout.addView(boardLayout);
-        mainLayout.addView(gameStateText);
-        mainLayout.addView(undoButton);
-        mainLayout.addView(newGameButton);
+        layout.addView(boardLayout);
+        layout.addView(gameStateText);
+        layout.addView(undoButton);
+        layout.addView(newGameButton);
 
         ConstraintSet set = new ConstraintSet();
-        set.clone(mainLayout);
+        set.clone(layout);
 
-        set.connect(boardLayout.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 0);
+        set.connect(boardLayout.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 0);
         set.connect(boardLayout.getId(), ConstraintSet.BOTTOM, gameStateText.getId(), ConstraintSet.TOP, 0);
-        set.connect(boardLayout.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 0);
-        set.connect(boardLayout.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, 0);
+        set.connect(boardLayout.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 0);
+        set.connect(boardLayout.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 0);
 
         set.connect(gameStateText.getId(), ConstraintSet.BOTTOM, undoButton.getId(), ConstraintSet.TOP, 0);
         set.connect(gameStateText.getId(), ConstraintSet.TOP, boardLayout.getId(), ConstraintSet.BOTTOM, 0);
-        set.connect(gameStateText.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 0);
-        set.connect(gameStateText.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, 0);
+        set.connect(gameStateText.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 0);
+        set.connect(gameStateText.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 0);
 
-        set.connect(undoButton.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM, 0);
-        set.connect(undoButton.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, buttonsMargin);
+        set.connect(undoButton.getId(), ConstraintSet.BOTTOM, layout.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(undoButton.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, buttonsMargin);
         set.connect(undoButton.getId(), ConstraintSet.RIGHT, newGameButton.getId(), ConstraintSet.LEFT, buttonsMargin);
 
-        set.connect(newGameButton.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM, 0);
+        set.connect(newGameButton.getId(), ConstraintSet.BOTTOM, layout.getId(), ConstraintSet.BOTTOM, 0);
         set.connect(newGameButton.getId(), ConstraintSet.LEFT, undoButton.getId(), ConstraintSet.RIGHT, 0);
-        set.connect(newGameButton.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, buttonsMargin);
+        set.connect(newGameButton.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, buttonsMargin);
 
-        set.applyTo(mainLayout);
+        set.applyTo(layout);
     }
 }
