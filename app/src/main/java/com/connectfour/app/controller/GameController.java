@@ -24,7 +24,7 @@ public class GameController implements ControllerInterface {
      * This constructor also creates {@link GameView} which creates all game views
      * in the specified {@code gameLayout} parameter.
      *
-     * @param model  the GameModelInterface object to use for the game logic
+     * @param model      the GameModelInterface object to use for the game logic
      * @param gameLayout the ConstraintLayout object to use as layout for the game views
      */
     public GameController(ModelInterface model, ConstraintLayout gameLayout) {

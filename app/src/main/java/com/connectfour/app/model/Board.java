@@ -10,8 +10,8 @@ import static com.connectfour.app.model.Disk.PLAYER_2;
 
 /**
  * The {@code Board} class represents the Connect Four game board.
- * The board is a two-dimensional array of {@link Disk} objects.
- * It keeps track of the current player, and provides methods for making moves and checking for end of the game.
+ * It keeps track of the current player, and provides methods for making moves and
+ * checking for end of the game. The board is a 2D array of {@link Disk} objects.
  */
 public class Board {
 
@@ -20,7 +20,7 @@ public class Board {
     protected final Disk[][] values;
     protected final int width;
     protected final int height;
-    protected Disk currentPlayerDisk;
+    protected Disk currentPlayerDisk = PLAYER_1;
 
     /**
      * Constructs a new {@code Board} object with the default dimensions.
@@ -88,18 +88,6 @@ public class Board {
      */
     public void changePlayer() {
         currentPlayerDisk = (currentPlayerDisk == PLAYER_1) ? PLAYER_2 : PLAYER_1;
-    }
-
-    /**
-     * Prints the board to the console. It can be useful for debugging.
-     */
-    public void print() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                System.out.print(values[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     /**
