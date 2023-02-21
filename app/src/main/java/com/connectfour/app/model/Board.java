@@ -279,4 +279,18 @@ public class Board {
         return new BoardHash(hash1, hash2);
     }
 
+    /**
+     * Compares this {@code Board} object to another object for equality.
+     *
+     * @param o the object to compare
+     * @return true if the objects are equal
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return Arrays.deepEquals(values, board.values) && currentPlayerDisk == board.currentPlayerDisk;
+    }
+
 }
