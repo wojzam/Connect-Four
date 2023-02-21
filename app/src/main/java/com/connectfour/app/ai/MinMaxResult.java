@@ -3,6 +3,8 @@ package com.connectfour.app.ai;
 /**
  * A class that represents the result of the MinMax algorithm.
  * It contains a chosen column and its corresponding score.
+ *
+ * @see AI
  */
 public class MinMaxResult {
 
@@ -10,7 +12,7 @@ public class MinMaxResult {
     private final int score;
 
     /**
-     * Constructs a new MinMaxResult with the given column and score
+     * Constructs a new MinMaxResult with the given column and score.
      *
      * @param column the chosen column
      * @param score  the corresponding score
@@ -21,8 +23,6 @@ public class MinMaxResult {
     }
 
     /**
-     * Returns the chosen column in this result
-     *
      * @return the chosen column
      */
     public int getColumn() {
@@ -30,8 +30,6 @@ public class MinMaxResult {
     }
 
     /**
-     * Returns the corresponding score of the chosen column in this result
-     *
      * @return the corresponding score
      */
     public int getScore() {

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Represents the {@link AI} opponent in the Connect Four game.
+ * Represents the {@code AI} opponent in the Connect Four game.
  * It uses the MinMax algorithm with alpha-beta pruning and transposition table to make its moves.
  */
 public class AI {
@@ -18,7 +18,7 @@ public class AI {
 
     /**
      * A hash map used to store previously calculated {@link MinMaxResult} in order to avoid recalculating them.
-     * The keys are {@link BoardHash} objects that represent the state of the game {@link Board}, and the values are MinMaxResult
+     * The keys are {@link BoardHash} objects that represent the state of the game {@link Board}, and the values are {@code MinMaxResult}
      * objects that contain the score of the best move and the column where the disk should be placed.
      */
     private final HashMap<BoardHash, MinMaxResult> transpositionTable = new HashMap<>();
@@ -29,10 +29,11 @@ public class AI {
     private Disk aiDisk;
 
     /**
-     * Chooses the best column to play using the Minimax algorithm with alpha-beta pruning and transposition tables.
+     * Chooses the best column to play using the Minimax algorithm with alpha-beta pruning and transposition table,
+     * which is implemented in the {@link #lookupOrExecuteMinMax}.
      * The method returns the column number with the highest score indicating the best move.
      *
-     * @param board the current game board
+     * @param board the game board
      * @param depth the depth of the MinMax algorithm search
      * @return the chosen column number
      */
@@ -48,15 +49,16 @@ public class AI {
 
     /**
      * Looks up the transposition table to see if the given game state is already present. If it is present,
-     * the method returns the corresponding {@link MinMaxResult}. Otherwise, it executes the MinMax algorithm
-     * and returns the resulting MinMaxResult. The result is also added to the transposition table.
+     * the method returns the corresponding {@link MinMaxResult}. Otherwise, it executes the {@link #minMax} algorithm
+     * and returns the resulting {@code MinMaxResult}. The result is also added to the transposition table.
      *
-     * @param board            the current game board
+     * @param board            the game board
      * @param depth            the depth of the MinMax algorithm search
      * @param alpha            the alpha value for alpha-beta pruning
      * @param beta             the beta value for alpha-beta pruning
      * @param maximizingPlayer whether the current player is trying to maximize their score or not
      * @return the MinMaxResult for the given game state
+     * @see #transpositionTable
      */
     private MinMaxResult lookupOrExecuteMinMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
         BoardHash boardHash = board.getBoardHash();
@@ -71,13 +73,24 @@ public class AI {
 
     /**
      * Runs the MinMax algorithm on the given board and returns {@link MinMaxResult}.
+     * At each node the possible moves order is determined by the {@link MovesOrder} class.
+     * When the algorithm reaches the bottom of the game tree, the current state of the board is evaluated using
+     * the {@link BoardEvaluator} class.
+     * The evaluation result is used to assign a score to the game state,
+     * which is then propagated up the tree during the MinMax search.
+     * If the game has ended during the exploration, the algorithm assigns one of the following scores:
+     * {@link #WINING_MOVE_SCORE}, if AI player has won the game
+     * {@link #LOSING_MOVE_SCORE}, if AI player has lost the game or
+     * {@link #TIE_MOVE_SCORE}, if the game ended in a tie
      *
-     * @param board            the current game board
+     * @param board            the game board
      * @param depth            the depth of the MinMax algorithm search
      * @param alpha            the alpha value for alpha-beta pruning
      * @param beta             the beta value for alpha-beta pruning
      * @param maximizingPlayer whether the current player is trying to maximize their score or not
      * @return the MinMaxResult for the given game state
+     * @see MovesOrder
+     * @see BoardEvaluator
      */
     private MinMaxResult minMax(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
         if (board.currentPlayerWonGame()) {

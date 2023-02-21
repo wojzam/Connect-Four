@@ -14,12 +14,21 @@ import com.connectfour.app.model.Disk;
 
 import static com.connectfour.app.model.Disk.PLAYER_1;
 
+/**
+ * The {@code GameStateTextView} is a custom text view that displays the state of the game,
+ * such as which player's turn it is or who has won.
+ */
 public class GameStateTextView extends AppCompatTextView {
 
     private final int colorPlayer1;
     private final int colorPlayer2;
     private final int colorNeutral;
 
+    /**
+     * Constructs a new instance of {@code GameStateTextView}.
+     *
+     * @param context the context to use
+     */
     public GameStateTextView(@NonNull Context context) {
         super(context);
         setId(View.generateViewId());
@@ -31,6 +40,11 @@ public class GameStateTextView extends AppCompatTextView {
         colorNeutral = ContextCompat.getColor(context, R.color.white);
     }
 
+    /**
+     * Updates the text displayed by this view to reflect the current state of the game.
+     *
+     * @param board the game board
+     */
     public void update(@NonNull Board board) {
         final Disk currentPlayerID = board.getCurrentPlayerDisk();
         if (board.currentPlayerWonGame()) {

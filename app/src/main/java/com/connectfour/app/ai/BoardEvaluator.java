@@ -6,8 +6,10 @@ import com.connectfour.app.model.Disk;
 import static com.connectfour.app.model.Disk.EMPTY;
 
 /**
- * The {@link BoardEvaluator} class extends the {@link Board} class and is used by the {@link AI} player
+ * The {@code BoardEvaluator} class extends the {@link Board} class and is used by the {@link AI} player
  * to evaluate "goodness" of the current state of board, in the context of the MinMax algorithm.
+ *
+ * @see AI
  */
 public class BoardEvaluator extends Board {
 
@@ -32,7 +34,7 @@ public class BoardEvaluator extends Board {
     public static final int SCORE_THREE_IN_ROW_OPPONENT = -4;
 
     /**
-     * Creates a new {@link BoardEvaluator} object based on a copy of the given {@link Board} object.
+     * Creates a new {@code BoardEvaluator} object based on a copy of the given {@link Board} object.
      *
      * @param copy the Board object to create a copy from
      */

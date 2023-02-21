@@ -14,17 +14,36 @@ import com.connectfour.app.model.Disk;
 
 import static com.connectfour.app.model.Disk.EMPTY;
 
+/**
+ * The {@code ColumnLayout} represents a column in the Connect Four game board.
+ * It contains an array of {@link ImageView} objects representing the disks in the column.
+ *
+ * @see BoardLayout
+ */
 public class ColumnLayout extends LinearLayout {
 
     private final ImageView[] disksImages;
     private final int index;
     private Disk[] disks;
 
+    /**
+     * This constructor is not supported.
+     *
+     * @param context the context to use
+     * @throws UnsupportedOperationException always thrown, as this constructor is not supported
+     */
     public ColumnLayout(Context context) {
         super(context);
         throw new UnsupportedOperationException("This constructor is not supported");
     }
 
+    /**
+     * Constructs a new instance of {@code ColumnLayout}.
+     *
+     * @param context the context to use
+     * @param disks   the initial array of disks in the column
+     * @param index   the index of the column
+     */
     public ColumnLayout(@NonNull Context context, @NonNull Disk[] disks, int index) {
         super(context);
         this.disksImages = new ImageView[disks.length];
@@ -34,6 +53,11 @@ public class ColumnLayout extends LinearLayout {
         createAndAddDisks(context);
     }
 
+    /**
+     * Updates the disks and animates any changes.
+     *
+     * @param newDisks the new array of disks in the column
+     */
     public void update(@NonNull Disk[] newDisks) {
         assert newDisks.length == disks.length : "Received invalid disks array";
         for (int i = 0; i < disks.length; i++) {
@@ -45,6 +69,12 @@ public class ColumnLayout extends LinearLayout {
         disks = newDisks;
     }
 
+    /**
+     * Animates disk based on its type.
+     *
+     * @param disk  the disk to animate
+     * @param index the index of the disk in the column
+     */
     private void animateDisk(Disk disk, int index) {
         if (disk == EMPTY) {
             animateEmptyDisk(index);
@@ -53,12 +83,22 @@ public class ColumnLayout extends LinearLayout {
         }
     }
 
+    /**
+     * Animates empty disk, making it appear from nothing to its normal size.
+     *
+     * @param index the index of the disk in the column
+     */
     private void animateEmptyDisk(int index) {
         disksImages[index].setScaleX(0);
         disksImages[index].setScaleY(0);
         disksImages[index].animate().scaleX(1).scaleY(1).setDuration(400).start();
     }
 
+    /**
+     * Animates player's disk, making it fall into place in the column.
+     *
+     * @param index the index of the disk in the column
+     */
     private void animatePlayerDisk(int index) {
         int diskHeight = disksImages[index].getHeight();
         disksImages[index].setTranslationY(diskHeight * (index - disks.length));
@@ -68,6 +108,9 @@ public class ColumnLayout extends LinearLayout {
                 .start();
     }
 
+    /**
+     * Configures the layout.
+     */
     private void configure() {
         setOrientation(VERTICAL);
         setClickable(true);
@@ -75,6 +118,11 @@ public class ColumnLayout extends LinearLayout {
         setTag(index);
     }
 
+    /**
+     * Creates and adds the disk images to the layout.
+     *
+     * @param context the context to use
+     */
     private void createAndAddDisks(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int margin = (int) context.getResources().getDimension(R.dimen.board_margin);
@@ -91,6 +139,12 @@ public class ColumnLayout extends LinearLayout {
         }
     }
 
+    /**
+     * Sets the image resource of a disk image based on the type of disk.
+     *
+     * @param diskImage the ImageView to set the image resource for
+     * @param disk      the type of disk
+     */
     private void setDiskImageResource(ImageView diskImage, Disk disk) {
         switch (disk) {
             case PLAYER_1:
@@ -104,6 +158,9 @@ public class ColumnLayout extends LinearLayout {
         }
     }
 
+    /**
+     * @return index of column
+     */
     public int getIndex() {
         return index;
     }

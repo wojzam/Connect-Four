@@ -6,9 +6,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The {@link MovesOrder} class provides methods for ordering the possible moves in Connect Four game.
+ * The {@code MovesOrder} class provides methods for ordering the possible moves in Connect Four game.
  * It chooses more optimal order of available columns at higher levels of MinMax game tree, when it is more crucial
  * and random order at lower levels to add randomness to behaviour of the {@link AI} player.
+ *
+ * @see AI
  */
 public class MovesOrder {
 
@@ -40,6 +42,7 @@ public class MovesOrder {
      * @param board the current game board
      * @param depth the current depth of the Minimax algorithm
      * @return a list of available columns
+     * @see #RANDOM_ORDER_THRESHOLD
      */
     public static List<Integer> getAvailableColumns(Board board, int depth) {
         List<Integer> availableColumns = board.getAvailableColumns();
