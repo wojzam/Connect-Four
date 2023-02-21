@@ -46,6 +46,19 @@ public class Board {
     }
 
     /**
+     * Constructs a new {@code Board} object from 2D array of {@link Disk} values.
+     *
+     * @param values the 2D array of disk values to initialize the board with
+     */
+    public Board(Disk[][] values) {
+        this.width = values.length;
+        this.height = values[0].length;
+        this.values = Arrays.stream(values)
+                .map(row -> Arrays.copyOf(row, height))
+                .toArray(Disk[][]::new);
+    }
+
+    /**
      * Constructs a new {@code Board} object that is a copy of an existing board.
      *
      * @param copy the board to copy
