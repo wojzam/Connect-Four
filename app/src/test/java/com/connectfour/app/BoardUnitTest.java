@@ -5,9 +5,17 @@ import com.connectfour.app.model.Disk;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
+import java.util.List;
 
+import static com.connectfour.app.BoardTestData.EMPTY_BOARD;
+import static com.connectfour.app.BoardTestData.FULL_BOARD;
+import static com.connectfour.app.BoardTestData.HEIGHT;
+import static com.connectfour.app.BoardTestData.WIDTH;
 import static com.connectfour.app.model.Disk.EMPTY;
 import static com.connectfour.app.model.Disk.PLAYER_1;
 import static com.connectfour.app.model.Disk.PLAYER_2;
@@ -20,17 +28,66 @@ public class BoardUnitTest {
 
     private Board board;
 
+    private static void fillUpColumn(Board board, int column) {
+        for (int i = 0; i < board.getHeight(); i++) {
+            board.insertIntoColumn(column);
+        }
+    }
+
     @BeforeEach
     public void setUp() {
-        board = new Board(2, 2);
+        board = new Board(WIDTH, HEIGHT);
     }
 
     @Test
-    public void shouldInitializeEmptyBoard() {
-        Board customBoard = new Board(2, 3);
-        Disk[][] expectedValues = {{EMPTY, EMPTY, EMPTY}, {EMPTY, EMPTY, EMPTY}};
+    public void shouldCreateEmptyBoard() {
+        assertTrue(Arrays.deepEquals(board.getValues(), EMPTY_BOARD));
+    }
 
-        assertTrue(Arrays.deepEquals(customBoard.getValues(), expectedValues));
+    @Test
+    public void shouldCreateBoardWithDimensions() {
+        int width = 4, height = 6;
+        Board customBoard = new Board(width, height);
+
+        assertEquals(width, customBoard.getWidth());
+        assertEquals(height, customBoard.getHeight());
+    }
+
+    @Test
+    public void shouldCreateBoardFromArray() {
+        Disk[][] values = {{PLAYER_1, EMPTY}, {PLAYER_2, EMPTY}};
+        Board customBoard = new Board(values);
+
+        assertTrue(Arrays.deepEquals(customBoard.getValues(), values));
+    }
+
+    @Test
+    public void shouldCopyBoard() {
+        Disk[][] values = {{PLAYER_1, EMPTY}, {PLAYER_2, EMPTY}};
+        Board board1 = new Board(values);
+        Board board2 = new Board(board1);
+
+        board1.insertIntoColumn(0);
+
+        assertTrue(Arrays.deepEquals(board2.getValues(), values));
+    }
+
+    @Test
+    public void shouldResetBoard() {
+        Board fullBoard = new Board(FULL_BOARD);
+
+        fullBoard.reset();
+
+        assertTrue(Arrays.deepEquals(fullBoard.getValues(), EMPTY_BOARD));
+    }
+
+    @Test
+    public void shouldChangePlayer() {
+        Disk previous = board.getCurrentPlayerDisk();
+
+        board.changePlayer();
+
+        assertNotEquals(previous, board.getCurrentPlayerDisk());
     }
 
     @Test
@@ -40,217 +97,152 @@ public class BoardUnitTest {
 
     @Test
     public void shouldReturnFalseOnInsert_whenColumnIsFull() {
-        board.insertIntoColumn(0);
-        board.insertIntoColumn(0);
+        fillUpColumn(board, 0);
+
         assertFalse(board.insertIntoColumn(0));
     }
 
     @Test
     public void shouldInsertValueIntoFirstEmptyIndex() {
+        Board customBoard = new Board(2, 2);
+
+        customBoard.insertIntoColumn(0);
+
         Disk[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
+        assertTrue(Arrays.deepEquals(customBoard.getValues(), expectedValues));
+    }
 
-        board.insertIntoColumn(0, PLAYER_1);
+    @Test
+    public void shouldInsertCurrentPlayerDisk() {
+        Disk player1 = board.getCurrentPlayerDisk();
+        board.changePlayer();
+        Disk player2 = board.getCurrentPlayerDisk();
 
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+        board.changePlayer();
+        board.insertIntoColumn(0);
+        board.changePlayer();
+        board.insertIntoColumn(0);
+
+        Disk[] expectedValues = {player1, player2, EMPTY, EMPTY};
+        assertTrue(Arrays.deepEquals(board.getColumnValues(0), expectedValues));
     }
 
     @Test
     public void shouldRemoveTopDisk() {
-        Disk[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}};
-
-        board.insertIntoColumn(0, PLAYER_1);
+        board.insertIntoColumn(0);
         board.removeTopDiskFromColumn(0);
 
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+        assertTrue(Arrays.deepEquals(board.getValues(), EMPTY_BOARD));
     }
 
     @Test
     public void shouldRemoveTopDisk_whenColumnIsFull() {
+        Disk[][] initialValues = {{PLAYER_1, PLAYER_2}, {EMPTY, EMPTY}};
+        Board customBoard = new Board(initialValues);
+
+        customBoard.removeTopDiskFromColumn(0);
+
         Disk[][] expectedValues = {{PLAYER_1, EMPTY}, {EMPTY, EMPTY}};
-
-        board.insertIntoColumn(0, PLAYER_1);
-        board.insertIntoColumn(0, PLAYER_1);
-        board.removeTopDiskFromColumn(0);
-
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+        assertTrue(Arrays.deepEquals(customBoard.getValues(), expectedValues));
     }
 
     @Test
     public void shouldNotRemoveTopDisk_whenColumnIsEmpty() {
-        Disk[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}};
-
         board.removeTopDiskFromColumn(0);
 
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+        assertTrue(Arrays.deepEquals(board.getValues(), EMPTY_BOARD));
     }
 
     @Test
-    public void shouldChangePlayer() {
-        Disk previous = board.getCurrentPlayerDisk();
-        board.changePlayer();
+    void shouldGetAvailableColumns() {
+        List<Integer> availableColumns = board.getAvailableColumns();
 
-        assertNotEquals(previous, board.getCurrentPlayerDisk());
+        List<Integer> expectedColumns = Arrays.asList(0, 1, 2, 3);
+        assertTrue(availableColumns.containsAll(expectedColumns));
     }
 
     @Test
-    public void shouldInsertCurrentPlayer() {
-        Disk player1 = board.getCurrentPlayerDisk();
-        board.insertIntoColumn(0);
-        board.changePlayer();
-        Disk player2 = board.getCurrentPlayerDisk();
-        board.insertIntoColumn(0);
+    void shouldGetAvailableColumns_whenNotAllColumnsAreAvailable() {
+        fillUpColumn(board, 0);
+        fillUpColumn(board, 3);
 
-        Disk[][] expectedValues = {{player1, player2}, {EMPTY, EMPTY}};
+        List<Integer> availableColumns = board.getAvailableColumns();
 
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+        List<Integer> expectedColumns = Arrays.asList(1, 2);
+        assertTrue(availableColumns.containsAll(expectedColumns));
     }
 
     @Test
-    public void shouldCheckIfIsColumnFull() {
-        board.insertIntoColumn(0);
-        assertTrue(board.canInsertInColumn(0));
+    void shouldGetAvailableColumns_whenBoardIsFull() {
+        Board fullBoard = new Board(FULL_BOARD);
 
-        board.insertIntoColumn(0);
-        assertFalse(board.canInsertInColumn(0));
-    }
+        List<Integer> availableColumns = fullBoard.getAvailableColumns();
 
-    @Test
-    public void shouldResetBoard() {
-        Disk[][] expectedValues = {{EMPTY, EMPTY}, {EMPTY, EMPTY}};
-
-        board.insertIntoColumn(0);
-        board.insertIntoColumn(0);
-        board.insertIntoColumn(1);
-        board.insertIntoColumn(1);
-        board.reset();
-
-        assertTrue(Arrays.deepEquals(board.getValues(), expectedValues));
+        assertTrue(availableColumns.isEmpty());
     }
 
     @Test
     public void shouldCheckIfBoardIsFull() {
-        board.insertIntoColumn(0);
-        assertFalse(board.isFull());
+        Board fullBoard = new Board(FULL_BOARD);
 
-        board.insertIntoColumn(0);
-        assertFalse(board.isFull());
-
-        board.insertIntoColumn(1);
-        assertFalse(board.isFull());
-
-        board.insertIntoColumn(1);
-        assertTrue(board.isFull());
+        assertTrue(fullBoard.isFull());
     }
 
     @Test
-    public void shouldCheckIfWonGame_whenBoardIsEmpty() {
-        Board defaultBoard = new Board();
+    public void shouldCheckIfBoardIsFull_whenBoardIsNotFull() {
+        Board almostFullBoard = new Board(FULL_BOARD);
+        almostFullBoard.removeTopDiskFromColumn(0);
 
-        assertFalse(defaultBoard.currentPlayerWonGame());
+        assertFalse(almostFullBoard.isFull());
     }
 
-    @Test
-    public void shouldCheckIfWonGame_whenSequenceIsHorizontal() {
-        Board defaultBoard = new Board();
-        defaultBoard.insertIntoColumn(0);
-        defaultBoard.insertIntoColumn(1);
-        defaultBoard.insertIntoColumn(2);
-        assertFalse(defaultBoard.currentPlayerWonGame());
+    @ParameterizedTest(name = "winning {2}")
+    @MethodSource("com.connectfour.app.BoardTestData#providePotentialWinningSequences")
+    public void shouldCheckIfWonGame_givenWinningSequence(Disk[][] values, int winningMove, String name) {
+        Board board = new Board(values);
+        board.insertIntoColumn(winningMove);
 
-        defaultBoard.insertIntoColumn(3);
-
-        assertTrue(defaultBoard.currentPlayerWonGame());
+        assertTrue(board.currentPlayerWonGame(), name);
     }
 
-    @Test
-    public void shouldCheckIfWonGame_whenSequenceIsVertical() {
-        Board defaultBoard = new Board();
-        defaultBoard.insertIntoColumn(0);
-        defaultBoard.insertIntoColumn(0);
-        defaultBoard.insertIntoColumn(0);
-        assertFalse(defaultBoard.currentPlayerWonGame());
+    @ParameterizedTest(name = "non-winning {1}")
+    @MethodSource("com.connectfour.app.BoardTestData#provideNonWinningSequences")
+    public void shouldCheckIfWonGame_givenNonWinningSequence(Disk[][] values, String name) {
+        Board board = new Board(values);
 
-        defaultBoard.insertIntoColumn(0);
-
-        assertTrue(defaultBoard.currentPlayerWonGame());
-    }
-
-    @Test
-    public void shouldCheckIfWonGame_whenSequenceIsDiagonalPositiveSlope() {
-        Board defaultBoard = new Board();
-        defaultBoard.insertIntoColumn(0, PLAYER_1);
-        defaultBoard.insertIntoColumn(1, PLAYER_2);
-        defaultBoard.insertIntoColumn(1, PLAYER_1);
-        defaultBoard.insertIntoColumn(2, PLAYER_2);
-        defaultBoard.insertIntoColumn(2, PLAYER_2);
-        defaultBoard.insertIntoColumn(2, PLAYER_1);
-        defaultBoard.insertIntoColumn(3, PLAYER_2);
-        defaultBoard.insertIntoColumn(3, PLAYER_2);
-        defaultBoard.insertIntoColumn(3, PLAYER_2);
-        assertFalse(defaultBoard.currentPlayerWonGame());
-
-        defaultBoard.insertIntoColumn(3, PLAYER_1);
-
-        assertTrue(defaultBoard.currentPlayerWonGame());
-    }
-
-    @Test
-    public void shouldCheckIfWonGame_whenSequenceIsDiagonalNegativeSlope() {
-        Board defaultBoard = new Board();
-        defaultBoard.insertIntoColumn(3, PLAYER_1);
-        defaultBoard.insertIntoColumn(2, PLAYER_2);
-        defaultBoard.insertIntoColumn(2, PLAYER_1);
-        defaultBoard.insertIntoColumn(1, PLAYER_2);
-        defaultBoard.insertIntoColumn(1, PLAYER_2);
-        defaultBoard.insertIntoColumn(1, PLAYER_1);
-        defaultBoard.insertIntoColumn(0, PLAYER_2);
-        defaultBoard.insertIntoColumn(0, PLAYER_2);
-        defaultBoard.insertIntoColumn(0, PLAYER_2);
-        assertFalse(defaultBoard.currentPlayerWonGame());
-
-        defaultBoard.insertIntoColumn(0, PLAYER_1);
-
-        assertTrue(defaultBoard.currentPlayerWonGame());
-    }
-
-    @Test
-    public void shouldGenerateIdenticalHashCode_whenBoardsAreEmpty() {
-        Board board1 = new Board();
-        Board board2 = new Board();
-
-        assertEquals(board1.getBoardHash(), board2.getBoardHash());
+        assertFalse(board.currentPlayerWonGame(), name);
     }
 
     @Test
     public void shouldGenerateIdenticalHashCode_whenBoardsAreIdentical() {
-        Board board = new Board();
-
+        Board board1 = new Board();
+        Board board2 = new Board();
         int[] columns = {0, 0, 1, 2, 1, 1, 2, 0, 6, 0, 6, 4, 2, 3, 2};
-
         for (int col : columns) {
-            board.insertIntoColumn(col);
-            board.changePlayer();
+            board1.insertIntoColumn(col);
+            board2.insertIntoColumn(col);
+            board1.changePlayer();
+            board2.changePlayer();
         }
 
-        Board boardCopy = new Board(board);
-
-        assertEquals(board.getBoardHash(), boardCopy.getBoardHash());
+        assertEquals(board1.getBoardHash(), board2.getBoardHash());
     }
 
-    @Test
-    public void shouldGenerateDifferentHashCode_whenBoardsAreDifferent() {
-        Board board = new Board();
-
+    @ParameterizedTest(name = "Different column {0}")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6})
+    public void shouldGenerateDifferentHashCode_whenBoardsAreDifferent(int differentColumn) {
+        Board board1 = new Board();
+        Board board2 = new Board();
         int[] columns = {0, 0, 1, 2, 1, 1, 2, 0, 6, 0, 6, 4, 2, 3, 2};
-
         for (int col : columns) {
-            board.insertIntoColumn(col);
-            board.changePlayer();
+            board1.insertIntoColumn(col);
+            board2.insertIntoColumn(col);
+            board1.changePlayer();
+            board2.changePlayer();
         }
 
-        Board boardCopy = new Board(board);
-        boardCopy.insertIntoColumn(0, PLAYER_1);
+        board2.insertIntoColumn(differentColumn);
 
-        assertNotEquals(board.getBoardHash(), boardCopy.getBoardHash());
+        assertNotEquals(board1.getBoardHash(), board2.getBoardHash());
     }
 }

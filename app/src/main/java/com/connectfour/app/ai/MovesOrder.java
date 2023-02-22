@@ -17,7 +17,7 @@ public class MovesOrder {
     /**
      * The random order threshold value was chosen based on experimental results to improve performance.
      */
-    private static final int RANDOM_ORDER_THRESHOLD = 3;
+    public static final int RANDOM_ORDER_THRESHOLD = 3;
 
     /**
      * Sorts the list of columns based on their distance from the center column of the game board.

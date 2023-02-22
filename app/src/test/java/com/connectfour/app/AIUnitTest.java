@@ -6,134 +6,85 @@ import com.connectfour.app.model.Disk;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static com.connectfour.app.model.Disk.EMPTY;
 import static com.connectfour.app.model.Disk.PLAYER_1;
 import static com.connectfour.app.model.Disk.PLAYER_2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AIUnitTest {
 
     private static final int REPETITIONS_COUNT = 5;
-    private static final Disk AI_DISK = PLAYER_2;
-    private static final Disk HUMAN_DISK = PLAYER_1;
-    private final static int DEFAULT_DEPTH = 4;
-    private Board board;
+    private final static int TEST_DEPTH = 2;
     private AI ai;
 
     @BeforeEach
     public void setUp() {
-        board = new Board();
-        board.changePlayer();
         ai = new AI();
     }
 
-    @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldChooseWinningColumn_whenSequenceIsHorizontal() {
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(1, AI_DISK);
-        board.insertIntoColumn(2, AI_DISK);
+    @Test
+    public void shouldThrowException_whenDepthIsNotPositiveNumber() {
+        Board board = new Board();
+        int invalidDepth = 0;
 
-        assertEquals(3, ai.chooseColumn(board, DEFAULT_DEPTH));
+        assertThrows(AssertionError.class, () -> ai.chooseColumn(board, invalidDepth));
     }
 
     @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldBlockOpponentWin_whenSequenceIsHorizontal() {
-        board.insertIntoColumn(0, HUMAN_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(2, HUMAN_DISK);
+    public void shouldAddToSequence() {
+        Board board = new Board();
+        board.insertIntoColumn(3);
 
-        assertEquals(3, ai.chooseColumn(board, DEFAULT_DEPTH));
+        int chosenColumn = ai.chooseColumn(board, 1);
+        List<Integer> bestMoves = Arrays.asList(2, 3, 4);
+        assertTrue(bestMoves.contains(chosenColumn));
     }
 
     @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldChooseWinningColumn_whenSequenceIsVertical() {
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(0, AI_DISK);
+    public void shouldBlockOpponentWinInAdvance() {
+        Board board = new Board();
+        board.insertIntoColumn(3);
+        board.insertIntoColumn(4);
+        board.changePlayer();
 
-        assertEquals(0, ai.chooseColumn(board, DEFAULT_DEPTH));
-    }
-
-    @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldBlockOpponentWin_whenSequenceIsVertical() {
-        board.insertIntoColumn(0, HUMAN_DISK);
-        board.insertIntoColumn(0, HUMAN_DISK);
-        board.insertIntoColumn(0, HUMAN_DISK);
-
-        assertEquals(0, ai.chooseColumn(board, DEFAULT_DEPTH));
-    }
-
-    @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldChooseWinningColumn_whenSequenceIsDiagonalPositiveSlope() {
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(1, AI_DISK);
-        board.insertIntoColumn(2, AI_DISK);
-        board.insertIntoColumn(2, HUMAN_DISK);
-        board.insertIntoColumn(2, AI_DISK);
-        board.insertIntoColumn(3, HUMAN_DISK);
-        board.insertIntoColumn(3, AI_DISK);
-        board.insertIntoColumn(3, HUMAN_DISK);
-
-        assertEquals(3, ai.chooseColumn(board, DEFAULT_DEPTH));
-    }
-
-    @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldBlockOpponentWin_whenSequenceIsDiagonalPositiveSlope() {
-        board.insertIntoColumn(0, HUMAN_DISK);
-        board.insertIntoColumn(1, AI_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(2, HUMAN_DISK);
-        board.insertIntoColumn(2, AI_DISK);
-        board.insertIntoColumn(2, HUMAN_DISK);
-        board.insertIntoColumn(3, AI_DISK);
-        board.insertIntoColumn(3, HUMAN_DISK);
-        board.insertIntoColumn(3, AI_DISK);
-
-        assertEquals(3, ai.chooseColumn(board, DEFAULT_DEPTH));
-    }
-
-    @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldChooseWinningColumn_whenSequenceIsDiagonalNegativeSlope() {
-        board.insertIntoColumn(3, AI_DISK);
-        board.insertIntoColumn(2, HUMAN_DISK);
-        board.insertIntoColumn(2, AI_DISK);
-        board.insertIntoColumn(1, AI_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(1, AI_DISK);
-        board.insertIntoColumn(0, HUMAN_DISK);
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(0, HUMAN_DISK);
-
-        assertEquals(0, ai.chooseColumn(board, DEFAULT_DEPTH));
-    }
-
-    @RepeatedTest(REPETITIONS_COUNT)
-    public void shouldBlockOpponentWin_whenSequenceIsDiagonalNegativeSlope() {
-        board.insertIntoColumn(3, HUMAN_DISK);
-        board.insertIntoColumn(2, AI_DISK);
-        board.insertIntoColumn(2, HUMAN_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(1, AI_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(0, HUMAN_DISK);
-        board.insertIntoColumn(0, AI_DISK);
-
-        assertEquals(0, ai.chooseColumn(board, DEFAULT_DEPTH));
+        int chosenColumn = ai.chooseColumn(board, 4);
+        List<Integer> blockingMoves = Arrays.asList(2, 5);
+        assertTrue(blockingMoves.contains(chosenColumn));
     }
 
     @RepeatedTest(REPETITIONS_COUNT)
     public void shouldPrioritizeWinning_whenPossible() {
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(0, AI_DISK);
-        board.insertIntoColumn(0, AI_DISK);
+        Disk[][] boardValues = {
+                {PLAYER_1, PLAYER_1, PLAYER_1, EMPTY},
+                {PLAYER_2, PLAYER_2, PLAYER_2, EMPTY}};
+        Board board = new Board(boardValues);
 
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-        board.insertIntoColumn(1, HUMAN_DISK);
-
-        assertEquals(0, ai.chooseColumn(board, DEFAULT_DEPTH));
+        assertEquals(0, ai.chooseColumn(board, TEST_DEPTH));
     }
 
+    @ParameterizedTest(name = "winning {2}")
+    @MethodSource("com.connectfour.app.BoardTestData#providePotentialWinningSequences")
+    public void shouldChooseWinningColumn(Disk[][] values, int bestMove, String name) {
+        Board board = new Board(values);
+
+        assertEquals(bestMove, ai.chooseColumn(board, TEST_DEPTH), name);
+    }
+
+    @ParameterizedTest(name = "block winning {2}")
+    @MethodSource("com.connectfour.app.BoardTestData#providePotentialWinningSequences")
+    public void shouldBlockOpponentWin(Disk[][] values, int bestMove, String name) {
+        Board board = new Board(values);
+        board.changePlayer();
+
+        assertEquals(bestMove, ai.chooseColumn(board, TEST_DEPTH), name);
+    }
 }
